@@ -1,315 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Noah Nine | Official</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noah Nine — Official</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<nav class="navbar">
-  <div class="container nav-inner">
-    <a class="brand" href="index.html"><span class="brand-mark">N9</span><span>Noah Nine</span></a>
-    <div class="nav-links">
-      <a href="#music">Music</a>
-      <a href="#events">Shows</a>
-      <a href="#bio">Biography</a>
-      <a href="#news">News</a>
-      <a href="users.html">Login</a>
-      <div class="cta-wrap">
-        <button class="btn btn-primary" id="ctaBtn" type="button">Tickets / Join Team ▾</button>
-        <div class="cta-menu" id="ctaMenu">
-          <button type="button" data-action="tickets">Buy Tickets</button>
-          <button type="button" data-action="join">Join Noah Nine Team</button>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="logo" href="index.html">NOAH <span>NINE</span></a>
+      <div class="nav-links">
+        <a href="#music">Music</a>
+        <a href="#shows">Shows</a>
+        <a href="#bio">Biography</a>
+        <a href="#news">News</a>
+        <a href="users.html">Fan Login</a>
+        <div class="cta-wrap">
+          <button class="btn btn-gold" id="ctaBtn" type="button">Buy Tickets / Join Team ▾</button>
+          <div class="cta-menu" id="ctaMenu">
+            <button type="button" data-action="tickets">🎫 Buy Tickets</button>
+            <button type="button" data-action="join">⭐ Join Noah Nine Team</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<header class="hero container">
-  <div class="hero-badge">Emotional Country Artist</div>
-  <h1>Welcome to <span>Noah Nine</span></h1>
-  <p>Stream the latest singles, catch upcoming shows, and join the official fan team. Pay with BTC, USDT, TRX — or contact management for bank transfer.</p>
-  <div class="hero-actions">
-    <button class="btn btn-primary" id="heroTickets" type="button">Buy Tickets</button>
-    <a class="btn btn-ghost" href="users.html">Fan Account</a>
-    <a class="btn btn-accent" href="users.html?mode=register#support">Support Artist</a>
-  </div>
-</header>
-
-<section id="news"><div class="container">
-  <h2 class="section-title">News & Updates</h2>
-  <p class="section-sub">Latest announcements from management.</p>
-  <div class="grid-2" id="newsList"><div class="empty">Loading…</div></div>
-</div></section>
-
-<section id="music"><div class="container">
-  <h2 class="section-title">Music</h2>
-  <p class="section-sub">Official releases by Noah Nine.</p>
-  <div class="grid-2" id="musicList"><div class="empty">Loading…</div></div>
-</div></section>
-
-<section id="events"><div class="container">
-  <h2 class="section-title">Shows & Events</h2>
-  <p class="section-sub">Past, current, and coming soon.</p>
-  <div class="tabs" id="eventTabs">
-    <button class="tab active" type="button" data-status="all">All</button>
-    <button class="tab" type="button" data-status="upcoming">Coming Soon</button>
-    <button class="tab" type="button" data-status="current">Current</button>
-    <button class="tab" type="button" data-status="past">Past</button>
-  </div>
-  <div class="grid-3" id="eventsList"><div class="empty">Loading…</div></div>
-</div></section>
-
-<section id="bio"><div class="container">
-  <h2 class="section-title">Biography</h2>
-  <p class="section-sub">The story behind the music.</p>
-  <div class="bio-box" id="bioText">Loading…</div>
-</div></section>
-
-<footer class="footer"><div class="container">
-  <strong>Noah Nine</strong> · Official Site ·
-  <a href="users.html">Login / Join Team</a> ·
-  <a href="admin.html">Admin</a>
-</div></footer>
-
-<button class="chat-fab" id="chatFab" type="button" title="Live Chat">💬</button>
-<div class="chat-panel" id="chatPanel">
-  <div class="chat-head"><strong>Management Chat</strong>
-    <button class="btn btn-ghost btn-sm" id="closeChat" type="button">✕</button>
-  </div>
-  <div class="chat-messages" style="color:var(--muted)">
-    To chat with management, <a href="users.html">login or register</a>. Live chat is inside your account.<br><br>
-    For bank-transfer tickets: choose Contact Management at checkout, then open chat after login.
-  </div>
-</div>
-
-<div class="modal-overlay" id="ticketModal">
-  <div class="modal">
-    <h2>Buy Tickets</h2>
-    <div id="ticketStepEvents">
-      <p class="section-sub" style="margin-bottom:.8rem">Select a show / event</p>
-      <div id="ticketEventsPick"></div>
-    </div>
-    <div id="ticketStepPay" style="display:none">
-      <div id="selectedEventInfo" class="card" style="margin-bottom:.8rem"></div>
-      <div class="form-row">
-        <div class="form-group"><label>Full name</label><input id="buyerName" /></div>
-        <div class="form-group"><label>Email</label><input id="buyerEmail" type="email" /></div>
+  <header class="hero">
+    <div class="container">
+      <h1>The sound of <em>Noah Nine</em></h1>
+      <p>Official hub for music, live shows, fan access, and the Noah Nine team. Stream the latest tracks and never miss a date on tour.</p>
+      <div class="hero-actions">
+        <button class="btn btn-gold" type="button" onclick="openTicketsFlow()">Buy Tickets</button>
+        <a class="btn btn-purple" href="users.html">Join the Team</a>
+        <a class="btn btn-outline" href="#music">Explore Music</a>
       </div>
-      <div class="form-group"><label>Quantity</label><input id="ticketQty" type="number" min="1" value="1" /></div>
-      <div class="pay-options" id="payOptions">
-        <label class="pay-option"><input type="radio" name="payMethod" value="BTC" /> BTC</label>
-        <label class="pay-option"><input type="radio" name="payMethod" value="USDT" /> USDT</label>
-        <label class="pay-option"><input type="radio" name="payMethod" value="TRX" /> TRX</label>
-        <label class="pay-option"><input type="radio" name="payMethod" value="CONTACT" /> Contact Management (Bank Transfer)</label>
-      </div>
-      <div id="walletDisplay" class="wallet-box" style="display:none"></div>
-      <div id="contactHint" class="contact-box" style="display:none">
-        After submitting, <a href="users.html">login</a> and use live chat to confirm bank transfer.
-        <div id="mgmtContactPublic" style="margin-top:.7rem"></div>
-      </div>
-      <div class="form-group" id="txGroup"><label>Transaction hash (crypto)</label><input id="txHash" placeholder="Paste TX after payment" /></div>
     </div>
-    <div id="ticketStepDone" style="display:none">
-      <div class="success-msg" style="display:block">Request submitted.</div>
-      <div class="receipt" id="pendingReceipt"></div>
-      <p style="margin-top:.6rem;color:var(--muted);font-size:.9rem">Crypto stays pending until admin approval, then full receipt is finalized.</p>
+  </header>
+
+  <section class="section" id="music">
+    <div class="container">
+      <h2 class="section-title">Music</h2>
+      <div class="grid" id="musicGrid"></div>
     </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" id="ticketCancel" type="button">Close</button>
-      <button class="btn btn-ghost" id="ticketBack" type="button" style="display:none">Back</button>
-      <button class="btn btn-primary" id="ticketNext" type="button">Continue</button>
+  </section>
+
+  <section class="section" id="shows" style="background:var(--bg2)">
+    <div class="container">
+      <h2 class="section-title">Shows &amp; Events</h2>
+      <div class="tabs" id="eventTabs">
+        <button class="tab active" data-filter="all">All</button>
+        <button class="tab" data-filter="current">Current</button>
+        <button class="tab" data-filter="coming">Coming Soon</button>
+        <button class="tab" data-filter="past">Past</button>
+      </div>
+      <div class="grid" id="eventsGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="bio">
+    <div class="container">
+      <h2 class="section-title">Biography</h2>
+      <div class="bio-box" id="bioBox"></div>
+    </div>
+  </section>
+
+  <section class="section" id="news" style="background:var(--bg2)">
+    <div class="container">
+      <h2 class="section-title">News &amp; Updates</h2>
+      <div id="newsList"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> Noah Nine. All rights reserved.</p>
+      <p class="mt-1"><a href="users.html">Fan Account</a> · <a href="admin.html">Admin</a></p>
+    </div>
+  </footer>
+
+  <!-- Floating chat for guests (redirects to login) -->
+  <button class="chat-fab" id="guestChatFab" title="Live chat" type="button">💬</button>
+
+  <!-- Ticket modal -->
+  <div class="modal-overlay hidden" id="ticketModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="ticketModalTitle">Select a Show</h2>
+        <button class="modal-close" type="button" data-close="ticketModal">×</button>
+      </div>
+      <div id="ticketStepEvents"></div>
+      <div id="ticketStepPay" class="hidden"></div>
+      <div id="ticketStepDone" class="hidden"></div>
     </div>
   </div>
-</div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
+  <script>
+  /* ========== Shared store ========== */
+  const DB_KEY = 'noahNineDB';
+  const DEFAULT_DB = () => ({
+    admin: { username: 'admin', password: 'noahnine2026' },
+    management: {
+      email: 'management@noahnine.com',
+      phone: '+1 (555) 019-9900',
+      address: 'Noah Nine HQ — Los Angeles, CA',
+      note: 'For bank transfer details, open Live Chat with management after login or from your fan account.'
+    },
+    wallets: {
+      BTC: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+      USDT: 'TXyzUSDTDemoWalletAddressNoahNine001',
+      TRX: 'TXyzTRXDemoWalletAddressNoahNineTRC20'
+    },
+    bio: 'Noah Nine is a boundary-pushing recording artist blending alternative R&B, electronic textures, and raw storytelling. From underground stages to sold-out rooms, Noah builds worlds.fans can feel — night after night, city after city.\n\nWith a growing catalogue and a global fan movement, Noah Nine invites you on the journey: stream the music, catch a show, or join the team that moves the culture forward.',
+    music: [
+      { id: 'm1', title: 'Midnight Frequency', album: 'NINE', year: '2025', link: 'https://open.spotify.com' },
+      { id: 'm2', title: 'Gold Room', album: 'NINE', year: '2025', link: 'https://music.apple.com' },
+      { id: 'm3', title: 'Afterglow', album: 'Singles', year: '2024', link: 'https://soundcloud.com' }
+    ],
+    events: [
+      { id: 'e1', title: 'Noah Nine Live — LA', venue: 'The Wiltern', city: 'Los Angeles, CA', date: '2026-08-15', time: '20:00', price: 85, status: 'coming', desc: 'Headlining night with full band.' },
+      { id: 'e2', title: 'Summer Sessions NYC', venue: 'Brooklyn Steel', city: 'New York, NY', date: '2026-07-20', time: '21:00', price: 75, status: 'current', desc: 'Limited general admission.' },
+      { id: 'e3', title: 'Neon Tour — London', venue: 'O2 Academy Brixton', city: 'London, UK', date: '2025-11-02', time: '19:30', price: 60, status: 'past', desc: 'European leg opener.' }
+    ],
+    news: [
+      { id: 'n1', title: 'New single dropping soon', body: 'Stay tuned — Midnight Frequency (Remix) arrives next month.', date: new Date().toISOString() }
+    ],
+    users: [],
+    tickets: [],
+    supports: [],
+    chats: {},
+    chatMeta: {}
+  });
 
-function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function fmtDate(str){if(!str)return"";try{return new Date(str+"T00:00:00").toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}catch{return str;}}
-function uid(){return db.ref().push().key;}
-function receiptCode(){return "NN-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();}
+  function loadDB() {
+    try {
+      const raw = localStorage.getItem(DB_KEY);
+      if (!raw) {
+        const db = DEFAULT_DB();
+        localStorage.setItem(DB_KEY, JSON.stringify(db));
+        return db;
+      }
+      return { ...DEFAULT_DB(), ...JSON.parse(raw) };
+    } catch {
+      const db = DEFAULT_DB();
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+      return db;
+    }
+  }
+  function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+  function uid(p = 'id') { return p + '_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); }
+  function toast(msg, type = 'ok') {
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2800);
+  }
+  function fmtDate(d) {
+    try { return new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
+    catch { return d; }
+  }
+  function statusBadge(s) {
+    const map = { past: 'badge-past', current: 'badge-current', coming: 'badge-soon' };
+    const label = { past: 'Past', current: 'Current', coming: 'Coming Soon' };
+    return `<span class="badge ${map[s] || 'badge-past'}">${label[s] || s}</span>`;
+  }
+  function autoStatus(ev) {
+    if (ev.status === 'past' || ev.status === 'current' || ev.status === 'coming') return ev.status;
+    const today = new Date(); today.setHours(0,0,0,0);
+    const d = new Date(ev.date + 'T00:00:00');
+    if (isNaN(d)) return 'coming';
+    if (d < today) return 'past';
+    if (d.getTime() === today.getTime()) return 'current';
+    return 'coming';
+  }
 
-let allEvents=[], selectedEvent=null, ticketStep=1, wallets={}, contactInfo={};
+  let DB = loadDB();
+  let eventFilter = 'all';
+  let selectedEvent = null;
+  let payMethod = null;
 
-document.addEventListener("DOMContentLoaded",()=>{
-  const btn=document.getElementById("ctaBtn"), menu=document.getElementById("ctaMenu");
-  btn.onclick=e=>{e.stopPropagation(); menu.classList.toggle("open");};
-  document.addEventListener("click",()=>menu.classList.remove("open"));
-  menu.querySelectorAll("button").forEach(b=>{
-    b.onclick=()=>{
-      menu.classList.remove("open");
-      if(b.dataset.action==="tickets") openTicketFlow();
-      if(b.dataset.action==="join") location.href="users.html?mode=register";
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* CTA dropdown */
+  const ctaBtn = document.getElementById('ctaBtn');
+  const ctaMenu = document.getElementById('ctaMenu');
+  ctaBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    ctaMenu.classList.toggle('open');
+  });
+  document.addEventListener('click', () => ctaMenu.classList.remove('open'));
+  ctaMenu.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    ctaMenu.classList.remove('open');
+    if (btn.dataset.action === 'tickets') openTicketsFlow();
+    if (btn.dataset.action === 'join') location.href = 'users.html?mode=register';
+  });
+
+  document.getElementById('guestChatFab').addEventListener('click', () => {
+    toast('Please login or register to chat with management', 'ok');
+    setTimeout(() => location.href = 'users.html', 900);
+  });
+
+  /* Render site content */
+  function renderMusic() {
+    const el = document.getElementById('musicGrid');
+    if (!DB.music.length) { el.innerHTML = '<div class="empty">No music listed yet.</div>'; return; }
+    el.innerHTML = DB.music.map(m => `
+      <div class="card music-item">
+        <div class="music-icon">♪</div>
+        <div>
+          <h3>${esc(m.title)}</h3>
+          <div class="meta">${esc(m.album || 'Single')} · ${esc(m.year || '')}</div>
+          ${m.link ? `<a class="stream" href="${esc(m.link)}" target="_blank" rel="noopener">Listen →</a>` : ''}
+        </div>
+      </div>`).join('');
+  }
+  function renderEvents() {
+    const el = document.getElementById('eventsGrid');
+    let list = DB.events.map(e => ({ ...e, status: e.status || autoStatus(e) }));
+    if (eventFilter !== 'all') list = list.filter(e => e.status === eventFilter);
+    list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    if (!list.length) { el.innerHTML = '<div class="empty">No shows in this category.</div>'; return; }
+    el.innerHTML = list.map(e => `
+      <div class="card">
+        ${statusBadge(e.status)}
+        <h3 class="mt-1">${esc(e.title)}</h3>
+        <div class="meta">${fmtDate(e.date)} · ${esc(e.time || '')}</div>
+        <p class="muted">${esc(e.venue)} — ${esc(e.city)}</p>
+        <p class="mt-1">${esc(e.desc || '')}</p>
+        <div class="between mt-2">
+          <strong style="color:var(--gold2)">$${Number(e.price || 0).toFixed(2)}</strong>
+          ${e.status !== 'past'
+            ? `<button class="btn btn-sm btn-gold" type="button" onclick="openTicketsFlow('${e.id}')">Buy Ticket</button>`
+            : `<span class="muted">Ended</span>`}
+        </div>
+      </div>`).join('');
+  }
+  function renderBio() {
+    document.getElementById('bioBox').textContent = DB.bio || 'Biography coming soon.';
+  }
+  function renderNews() {
+    const el = document.getElementById('newsList');
+    const list = [...(DB.news || [])].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    if (!list.length) { el.innerHTML = '<div class="empty">No announcements yet.</div>'; return; }
+    el.innerHTML = list.map(n => `
+      <article class="news-item">
+        <time>${fmtDate(n.date)}</time>
+        <h3>${esc(n.title)}</h3>
+        <p class="muted">${esc(n.body)}</p>
+      </article>`).join('');
+  }
+  function esc(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  document.getElementById('eventTabs').addEventListener('click', (e) => {
+    const t = e.target.closest('.tab');
+    if (!t) return;
+    document.querySelectorAll('#eventTabs .tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    eventFilter = t.dataset.filter;
+    renderEvents();
+  });
+
+  /* Ticket flow */
+  function openTicketsFlow(eventId) {
+    DB = loadDB();
+    selectedEvent = null;
+    payMethod = null;
+    document.getElementById('ticketModal').classList.remove('hidden');
+    document.getElementById('ticketModalTitle').textContent = 'Select a Show / Event';
+    document.getElementById('ticketStepEvents').classList.remove('hidden');
+    document.getElementById('ticketStepPay').classList.add('hidden');
+    document.getElementById('ticketStepDone').classList.add('hidden');
+
+    const sellable = DB.events
+      .map(e => ({ ...e, status: e.status || autoStatus(e) }))
+      .filter(e => e.status === 'current' || e.status === 'coming');
+
+    const box = document.getElementById('ticketStepEvents');
+    if (!sellable.length) {
+      box.innerHTML = '<div class="empty">No upcoming shows available.</div>';
+      return;
+    }
+    box.innerHTML = sellable.map(e => `
+      <button type="button" class="card w-full mb-1" style="text-align:left;cursor:pointer;background:var(--bg2)" data-pick="${e.id}">
+        <div class="between">
+          <strong>${esc(e.title)}</strong>
+          ${statusBadge(e.status)}
+        </div>
+        <div class="meta">${fmtDate(e.date)} · ${esc(e.city)} · $${Number(e.price).toFixed(2)}</div>
+      </button>`).join('');
+
+    box.querySelectorAll('[data-pick]').forEach(btn => {
+      btn.addEventListener('click', () => goPay(btn.dataset.pick));
+    });
+
+    if (eventId) goPay(eventId);
+  }
+  window.openTicketsFlow = openTicketsFlow;
+
+  function goPay(eventId) {
+    selectedEvent = DB.events.find(e => e.id === eventId);
+    if (!selectedEvent) return;
+    document.getElementById('ticketModalTitle').textContent = 'Payment Dashboard';
+    document.getElementById('ticketStepEvents').classList.add('hidden');
+    document.getElementById('ticketStepPay').classList.remove('hidden');
+    document.getElementById('ticketStepDone').classList.add('hidden');
+
+    const e = selectedEvent;
+    document.getElementById('ticketStepPay').innerHTML = `
+      <div class="card mb-2" style="background:var(--bg2)">
+        <h3>${esc(e.title)}</h3>
+        <p class="meta">${fmtDate(e.date)} · ${esc(e.time || '')} · ${esc(e.venue)}, ${esc(e.city)}</p>
+        <strong style="color:var(--gold2)">Ticket: $${Number(e.price).toFixed(2)}</strong>
+      </div>
+      <p class="mb-1 muted">Choose payment method</p>
+      <div class="pay-options" id="payOpts">
+        <div class="pay-opt" data-m="BTC"><strong>BTC</strong><small>Bitcoin</small></div>
+        <div class="pay-opt" data-m="USDT"><strong>USDT</strong><small>Tether</small></div>
+        <div class="pay-opt" data-m="TRX"><strong>TRX</strong><small>TRC-20</small></div>
+        <div class="pay-opt" data-m="BANK"><strong>Bank</strong><small>Contact Mgmt</small></div>
+      </div>
+      <div id="payDetails" class="mt-2"></div>
+      <div class="form-group mt-2">
+        <label>Your full name (for receipt)</label>
+        <input class="form-control" id="buyerName" placeholder="First Last" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-control" id="buyerEmail" type="email" placeholder="you@email.com" />
+      </div>
+      <div class="form-group" id="txFieldWrap">
+        <label>Transaction / TXID (crypto)</label>
+        <input class="form-control" id="buyerTx" placeholder="Paste TX hash after payment" />
+      </div>
+      <button class="btn btn-gold btn-block" type="button" id="submitPay">Submit Payment for Approval</button>
+      <button class="btn btn-outline btn-block mt-1" type="button" id="backEvents">← Back to shows</button>
+    `;
+
+    document.getElementById('payOpts').addEventListener('click', (ev) => {
+      const opt = ev.target.closest('.pay-opt');
+      if (!opt) return;
+      document.querySelectorAll('.pay-opt').forEach(x => x.classList.remove('selected'));
+      opt.classList.add('selected');
+      payMethod = opt.dataset.m;
+      const details = document.getElementById('payDetails');
+      const txWrap = document.getElementById('txFieldWrap');
+      if (payMethod === 'BANK') {
+        txWrap.classList.add('hidden');
+        details.innerHTML = `
+          <div class="contact-box">
+            <h4>Contact Management — Bank Transfer</h4>
+            <p>${esc(DB.management.note)}</p>
+            <p class="mt-1"><strong>Email:</strong> ${esc(DB.management.email)}</p>
+            <p><strong>Phone:</strong> ${esc(DB.management.phone)}</p>
+            <p class="mt-1" style="color:var(--gold2)">Please click the <strong>Live Chat</strong> button (bottom-right) on the website after logging in to complete bank transfer with management.</p>
+            <a class="btn btn-purple btn-sm mt-1" href="users.html">Open Fan Login / Chat</a>
+          </div>`;
+      } else {
+        txWrap.classList.remove('hidden');
+        const addr = (DB.wallets && DB.wallets[payMethod]) || '—';
+        details.innerHTML = `
+          <div class="wallet-box">
+            <div class="muted">Send exact ticket amount in <strong>${payMethod}</strong> to:</div>
+            <div class="mt-1">${esc(addr)}</div>
+            <div class="muted mt-1">After sending, paste your TXID below and submit. Admin will approve and auto-generate your receipt.</div>
+          </div>`;
+      }
+    });
+
+    document.getElementById('backEvents').onclick = () => openTicketsFlow();
+    document.getElementById('submitPay').onclick = submitTicketPayment;
+  }
+
+  function submitTicketPayment() {
+    if (!selectedEvent || !payMethod) { toast('Select a payment method', 'err'); return; }
+    const name = document.getElementById('buyerName').value.trim();
+    const email = document.getElementById('buyerEmail').value.trim();
+    const tx = (document.getElementById('buyerTx')?.value || '').trim();
+    if (!name || !email) { toast('Name and email required', 'err'); return; }
+    if (payMethod !== 'BANK' && !tx) { toast('Enter TXID after crypto payment', 'err'); return; }
+
+    DB = loadDB();
+    const ticket = {
+      id: uid('tix'),
+      code: 'NN-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
+      eventId: selectedEvent.id,
+      eventSnapshot: { ...selectedEvent },
+      buyerName: name,
+      buyerEmail: email,
+      method: payMethod,
+      txid: tx || null,
+      amount: Number(selectedEvent.price || 0),
+      status: payMethod === 'BANK' ? 'awaiting_bank' : 'pending',
+      createdAt: new Date().toISOString(),
+      approvedAt: null,
+      receipt: null,
+      userId: null
     };
-  });
-  document.getElementById("heroTickets").onclick=()=>openTicketFlow();
-  document.getElementById("chatFab").onclick=()=>document.getElementById("chatPanel").classList.toggle("open");
-  document.getElementById("closeChat").onclick=()=>document.getElementById("chatPanel").classList.remove("open");
-  loadMusic(); loadEvents(); loadBio(); loadNews(); loadMeta(); bindTicketModal();
-});
+    DB.tickets.push(ticket);
+    saveDB(DB);
 
-function loadMusic(){
-  db.ref("music").on("value",snap=>{
-    const list=Object.entries(snap.val()||{}).map(([id,m])=>({id,...m})).sort((a,b)=>(b.releaseDate||"").localeCompare(a.releaseDate||""));
-    const el=document.getElementById("musicList");
-    if(!list.length){el.innerHTML='<div class="empty">No music yet.</div>';return;}
-    el.innerHTML=list.map(m=>`<div class="card music-card">
-      <div class="music-cover">${m.coverUrl?`<img src="${esc(m.coverUrl)}" alt="">`:"N9"}</div>
-      <div><h3>${esc(m.title)}</h3><div class="meta">${esc(m.album||"Single")} · ${esc(m.releaseDate||"")}</div>
-      ${m.audioUrl?`<a href="${esc(m.audioUrl)}" target="_blank" rel="noopener">Listen</a>`:""}</div></div>`).join("");
-  });
-}
-function loadEvents(){
-  db.ref("events").on("value",snap=>{
-    allEvents=Object.entries(snap.val()||{}).map(([id,e])=>({id,...e})).sort((a,b)=>(a.eventDate||"").localeCompare(b.eventDate||""));
-    renderEvents(document.querySelector("#eventTabs .tab.active")?.dataset.status||"all");
-  });
-  document.querySelectorAll("#eventTabs .tab").forEach(tab=>{
-    tab.onclick=()=>{document.querySelectorAll("#eventTabs .tab").forEach(t=>t.classList.remove("active"));tab.classList.add("active");renderEvents(tab.dataset.status);};
-  });
-}
-function renderEvents(status){
-  const el=document.getElementById("eventsList");
-  let list=status==="all"?allEvents:allEvents.filter(e=>e.status===status);
-  if(!list.length){el.innerHTML='<div class="empty">No events here.</div>';return;}
-  el.innerHTML=list.map(e=>`<div class="card">
-    <span class="badge badge-${esc(e.status||"upcoming")}">${esc(e.status||"upcoming")}</span>
-    <h3 style="margin-top:.5rem">${esc(e.title)}</h3>
-    <div class="meta">${fmtDate(e.eventDate)}${e.eventTime?" · "+esc(e.eventTime):""}</div>
-    <div class="meta">${esc(e.venue||"")}${e.location?" · "+esc(e.location):""}</div>
-    <p style="margin:.5rem 0;color:var(--muted);font-size:.92rem">${esc(e.description||"")}</p>
-    <div><strong>$${Number(e.ticketPrice||0).toFixed(2)}</strong> ${esc(e.ticketCurrency||"USD")}</div>
-    ${(e.status==="upcoming"||e.status==="current")?`<button class="btn btn-primary btn-sm" style="margin-top:.8rem" type="button" onclick="openTicketFlow('${e.id}')">Buy Ticket</button>`:""}
-  </div>`).join("");
-}
-function loadBio(){
-  db.ref("biography").on("value",snap=>{
-    document.getElementById("bioText").textContent=(snap.val()&&snap.val().text)||"Biography will appear once published.";
-  });
-}
-function loadNews(){
-  db.ref("notifications").on("value",snap=>{
-    const list=Object.entries(snap.val()||{}).map(([id,n])=>({id,...n})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    const el=document.getElementById("newsList");
-    if(!list.length){el.innerHTML='<div class="empty">No news yet.</div>';return;}
-    el.innerHTML=list.map(n=>`<div class="card"><h3>${esc(n.title)}</h3>
-      <div class="meta">${n.createdAt?new Date(n.createdAt).toLocaleString():""}</div>
-      <p style="white-space:pre-wrap;color:#ddd9e8">${esc(n.content||"")}</p></div>`).join("");
-  });
-}
-function loadMeta(){
-  db.ref("cryptoWallets").on("value",s=>{wallets=s.val()||{};});
-  db.ref("contactInfo").on("value",s=>{
-    contactInfo=s.val()||{};
-    const box=document.getElementById("mgmtContactPublic");
-    if(box) box.innerHTML=`<strong>Management</strong><br>Email: ${esc(contactInfo.email||"—")}<br>Phone: ${esc(contactInfo.phone||"—")}<br>${esc(contactInfo.notes||"")}`;
-  });
-}
-function bindTicketModal(){
-  document.getElementById("ticketCancel").onclick=()=>document.getElementById("ticketModal").classList.remove("open");
-  document.getElementById("ticketBack").onclick=()=>{ticketStep=1;showTicketStep();};
-  document.getElementById("ticketNext").onclick=onTicketNext;
-  document.querySelectorAll("#payOptions .pay-option").forEach(opt=>{
-    opt.addEventListener("click",()=>{
-      opt.querySelector("input").checked=true;
-      document.querySelectorAll("#payOptions .pay-option").forEach(o=>o.classList.remove("selected"));
-      opt.classList.add("selected"); onPayMethodChange();
+    document.getElementById('ticketStepPay').classList.add('hidden');
+    document.getElementById('ticketStepDone').classList.remove('hidden');
+    document.getElementById('ticketModalTitle').textContent = 'Request Submitted';
+
+    if (payMethod === 'BANK') {
+      document.getElementById('ticketStepDone').innerHTML = `
+        <div class="empty" style="border-color:var(--gold)">
+          <p>Your bank transfer request was recorded.</p>
+          <p class="mt-1">Click the <strong>Live Chat</strong> button on the site (after login) to contact management and finish payment.</p>
+          <p class="muted mt-1">Ref: ${ticket.id}</p>
+          <a class="btn btn-purple mt-2" href="users.html">Go to Login / Chat</a>
+        </div>`;
+    } else {
+      document.getElementById('ticketStepDone').innerHTML = `
+        <div class="empty" style="border-color:var(--green)">
+          <p>Crypto payment submitted for admin approval.</p>
+          <p class="muted mt-1">Ticket ref: <strong>${ticket.code}</strong></p>
+          <p class="muted">Once approved, your receipt (code, ID, event info) is generated automatically. Check back or login to view it.</p>
+          <button class="btn btn-outline mt-2" type="button" data-close="ticketModal">Close</button>
+        </div>`;
+    }
+    toast('Payment request saved');
+  }
+
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.close).classList.add('hidden');
     });
   });
-}
-function openTicketFlow(eventId){
-  ticketStep=1; selectedEvent=null;
-  document.getElementById("ticketStepDone").style.display="none";
-  document.getElementById("ticketStepPay").style.display="none";
-  document.getElementById("ticketStepEvents").style.display="block";
-  document.getElementById("ticketNext").style.display="";
-  document.getElementById("ticketBack").style.display="none";
-  const buyable=allEvents.filter(e=>e.status==="upcoming"||e.status==="current");
-  const pick=document.getElementById("ticketEventsPick");
-  if(!buyable.length) pick.innerHTML='<div class="empty">No purchasable shows.</div>';
-  else pick.innerHTML=buyable.map(e=>`<label class="pay-option">
-    <input type="radio" name="pickEvent" value="${e.id}" ${eventId===e.id?"checked":""}/>
-    <span><strong>${esc(e.title)}</strong><br><span class="meta">${fmtDate(e.eventDate)} · $${Number(e.ticketPrice||0).toFixed(2)}</span></span>
-  </label>`).join("");
-  if(eventId){const f=allEvents.find(e=>e.id===eventId); if(f){selectedEvent=f;ticketStep=2;showTicketStep();}}
-  document.getElementById("ticketModal").classList.add("open");
-}
-window.openTicketFlow=openTicketFlow;
-function showTicketStep(){
-  document.getElementById("ticketStepEvents").style.display=ticketStep===1?"block":"none";
-  document.getElementById("ticketStepPay").style.display=ticketStep===2?"block":"none";
-  document.getElementById("ticketStepDone").style.display=ticketStep===3?"block":"none";
-  document.getElementById("ticketBack").style.display=ticketStep===2?"":"none";
-  document.getElementById("ticketNext").style.display=ticketStep===3?"none":"";
-  document.getElementById("ticketNext").textContent=ticketStep===2?"Submit Payment":"Continue";
-  if(ticketStep===2&&selectedEvent){
-    document.getElementById("selectedEventInfo").innerHTML=`<strong>${esc(selectedEvent.title)}</strong><br>
-      <span class="meta">${fmtDate(selectedEvent.eventDate)} · ${esc(selectedEvent.venue||"")}</span><br>
-      $${Number(selectedEvent.ticketPrice||0).toFixed(2)} ${esc(selectedEvent.ticketCurrency||"USD")}`;
-  }
-}
-function onTicketNext(){
-  if(ticketStep===1){
-    const c=document.querySelector('input[name="pickEvent"]:checked');
-    if(!c) return alert("Select an event.");
-    selectedEvent=allEvents.find(e=>e.id===c.value); ticketStep=2; showTicketStep(); return;
-  }
-  if(ticketStep===2) submitTicket();
-}
-function onPayMethodChange(){
-  const method=document.querySelector('input[name="payMethod"]:checked')?.value;
-  const wallet=document.getElementById("walletDisplay"), hint=document.getElementById("contactHint"), tx=document.getElementById("txGroup");
-  if(!method){wallet.style.display="none";hint.style.display="none";return;}
-  if(method==="CONTACT"){wallet.style.display="none";hint.style.display="block";tx.style.display="none";}
-  else{hint.style.display="none";tx.style.display="block";wallet.style.display="block";
-    wallet.innerHTML=`<strong>Send ${method} to:</strong><br>${esc(wallets[method]||"Wallet not configured yet.")}`;}
-}
-async function submitTicket(){
-  const name=document.getElementById("buyerName").value.trim();
-  const email=document.getElementById("buyerEmail").value.trim();
-  const qty=Math.max(1,parseInt(document.getElementById("ticketQty").value,10)||1);
-  const method=document.querySelector('input[name="payMethod"]:checked')?.value;
-  const txHash=document.getElementById("txHash").value.trim();
-  if(!name||!email) return alert("Name and email required.");
-  if(!method) return alert("Select payment method.");
-  if(method!=="CONTACT"&&!txHash) return alert("Paste crypto TX hash.");
-  const user=auth.currentUser;
-  const amount=Number(selectedEvent.ticketPrice||0)*qty;
-  const id=uid(), code=receiptCode();
-  await db.ref("tickets/"+id).set({
-    id, userId:user?user.uid:null, eventId:selectedEvent.id,
-    buyerName:name, buyerEmail:email, quantity:qty,
-    paymentMethod:method, paymentCurrency:method==="CONTACT"?"BANK":method,
-    txHash:txHash||"", amount,
-    status:method==="CONTACT"?"awaiting_contact":"pending",
-    receiptCode:code, eventTitle:selectedEvent.title, eventDate:selectedEvent.eventDate,
-    eventTime:selectedEvent.eventTime||"", venue:selectedEvent.venue||"",
-    location:selectedEvent.location||"", createdAt:Date.now()
+  document.getElementById('ticketModal').addEventListener('click', (e) => {
+    if (e.target.id === 'ticketModal') e.target.classList.add('hidden');
   });
-  ticketStep=3; showTicketStep();
-  document.getElementById("pendingReceipt").innerHTML=`
-    <div><strong>Reference / Receipt Code</strong></div><code>${code}</code>
-    <div style="margin-top:.6rem">Event: ${esc(selectedEvent.title)}<br>Qty: ${qty} · Amount: $${amount.toFixed(2)}<br>
-    Method: ${esc(method)}<br>Status: ${method==="CONTACT"?"Contact management via live chat":"Pending admin approval"}</div>`;
-}
-</script>
+  document.body.addEventListener('click', (e) => {
+    const c = e.target.closest('[data-close]');
+    if (c) document.getElementById(c.dataset.close)?.classList.add('hidden');
+  });
+
+  /* Sync if admin edits in another tab */
+  window.addEventListener('storage', (e) => {
+    if (e.key === DB_KEY) {
+      DB = loadDB();
+      renderAll();
+    }
+  });
+
+  function renderAll() {
+    DB = loadDB();
+    renderMusic(); renderEvents(); renderBio(); renderNews();
+  }
+  renderAll();
+  </script>
 </body>
 </html>
