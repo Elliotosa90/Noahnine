@@ -1,500 +1,512 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noah Nine | Fan Account</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noah Nine | Fan Account</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html"><span class="brand-mark">N9</span><span>Noah Nine</span></a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <button class="btn btn-ghost btn-sm" id="logoutBtn" type="button" style="display:none">Logout</button>
-      </div>
+<nav class="navbar">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark">N9</span><span>Noah Nine</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn" type="button" style="display:none">Logout</button>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- AUTH -->
-  <div class="auth-shell" id="authShell">
-    <div class="auth-card">
-      <h1 id="authTitle">Welcome back</h1>
-      <p class="sub" id="authSub">Login to your Noah Nine fan account</p>
-      <div class="error-msg" id="authError"></div>
-      <div class="success-msg" id="authSuccess"></div>
+<!-- AUTH -->
+<div class="auth-shell" id="authShell">
+  <div class="auth-card">
+    <h1 id="authTitle">Welcome back</h1>
+    <p class="sub" id="authSub">Login to your Noah Nine fan account</p>
+    <div class="error-msg" id="authError"></div>
+    <div class="success-msg" id="authSuccess"></div>
 
-      <form id="loginForm">
-        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" required /></div>
-        <div class="form-group"><label>Password</label><input type="password" id="loginPassword" required /></div>
-        <button class="btn btn-primary btn-block" type="submit">Login</button>
-      </form>
+    <form id="loginForm">
+      <div class="form-group"><label>Email</label><input type="email" id="loginEmail" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="loginPassword" required /></div>
+      <button class="btn btn-primary btn-block" type="submit">Login</button>
+    </form>
 
-      <form id="registerForm" style="display:none">
-        <div class="form-group"><label>Username</label><input id="regUsername" required /></div>
-        <div class="form-group"><label>Email</label><input type="email" id="regEmail" required /></div>
-        <div class="form-group"><label>Password</label><input type="password" id="regPassword" required minlength="6" /></div>
-        <button class="btn btn-primary btn-block" type="submit">Join Noah Nine Team</button>
-      </form>
+    <form id="registerForm" style="display:none">
+      <div class="form-group"><label>Username</label><input id="regUsername" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="regEmail" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="regPassword" required minlength="6" /></div>
+      <button class="btn btn-primary btn-block" type="submit">Join Noah Nine Team</button>
+    </form>
 
-      <div class="switch-auth">
-        <span id="switchText">New here?</span>
-        <a href="#" id="switchAuth">Create account</a>
-      </div>
+    <div class="switch-auth">
+      <span id="switchText">New here?</span>
+      <a href="#" id="switchAuth">Create account</a>
+    </div>
 
-      <hr class="sep" />
-      <button class="btn btn-accent btn-block" id="showMgmtContact" type="button">Management Contact</button>
-      <div class="contact-box" id="mgmtContactBox" style="display:none"></div>
-      <button class="btn btn-ghost btn-block" style="margin-top:.7rem" id="showSupportHint" type="button">Support Artist</button>
-      <p style="margin-top:.6rem;color:var(--muted);font-size:.85rem;text-align:center">
-        Support & tickets unlock after login.
-      </p>
+    <hr class="sep" />
+    <button class="btn btn-accent btn-block" id="showMgmtContact" type="button">Management Contact</button>
+    <div class="contact-box" id="mgmtContactBox" style="display:none"></div>
+    <button class="btn btn-ghost btn-block" style="margin-top:.7rem" id="showSupportHint" type="button">Support Artist</button>
+    <p style="margin-top:.6rem;color:var(--muted);font-size:.85rem;text-align:center">
+      Support &amp; tickets unlock after login.
+    </p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard container" id="dashboard">
+  <div class="dash-header">
+    <div>
+      <h1>Hello, <span id="dashName">Fan</span></h1>
+      <p class="section-sub" style="margin:0">Your Noah Nine fan dashboard</p>
+    </div>
+    <button class="btn btn-ghost" id="logoutBtn2" type="button">Logout</button>
+  </div>
+
+  <div class="dash-nav" id="dashNav">
+    <button class="tab active" type="button" data-panel="tickets">Buy Tickets</button>
+    <button class="tab" type="button" data-panel="mytickets">My Tickets</button>
+    <button class="tab" type="button" data-panel="support">Support Artist</button>
+    <button class="tab" type="button" data-panel="chat">Chat</button>
+    <button class="tab" type="button" data-panel="news">News</button>
+    <button class="tab" type="button" data-panel="contact">Management Contact</button>
+  </div>
+
+  <div class="dash-panel active" id="panel-tickets">
+    <div class="card">
+      <h2>Select a show</h2>
+      <div id="userEvents" class="grid-2" style="margin-top:1rem"></div>
     </div>
   </div>
 
-  <!-- DASHBOARD -->
-  <div class="dashboard container" id="dashboard">
-    <div class="dash-header">
-      <div>
-        <h1>Hello, <span id="dashName">Fan</span></h1>
-        <p class="section-sub" style="margin:0">Your Noah Nine fan dashboard</p>
+  <div class="dash-panel" id="panel-mytickets">
+    <div class="card table-wrap">
+      <h2 style="margin-bottom:.8rem">Tickets &amp; Receipts</h2>
+      <table>
+        <thead><tr><th>Receipt</th><th>Event</th><th>Amount</th><th>Method</th><th>Status</th><th>Details</th></tr></thead>
+        <tbody id="myTicketsBody"></tbody>
+      </table>
+      <div id="myTicketsEmpty" class="empty">No tickets yet.</div>
+    </div>
+  </div>
+
+  <div class="dash-panel" id="panel-support">
+    <div class="card" style="max-width:560px">
+      <h2>Support Noah Nine</h2>
+      <p class="section-sub">Pay with USDT, BTC, TRX — or contact management.</p>
+      <div class="form-group"><label>Amount (USD)</label><input type="number" id="supportAmount" min="1" step="0.01" /></div>
+      <div class="form-group"><label>Message</label><textarea id="supportMessage"></textarea></div>
+      <div class="pay-options" id="supportPayOptions">
+        <label class="pay-option"><input type="radio" name="supportPay" value="BTC" /> BTC</label>
+        <label class="pay-option"><input type="radio" name="supportPay" value="USDT" /> USDT</label>
+        <label class="pay-option"><input type="radio" name="supportPay" value="TRX" /> TRX</label>
+        <label class="pay-option"><input type="radio" name="supportPay" value="CONTACT" /> Contact Management</label>
       </div>
-      <button class="btn btn-ghost" id="logoutBtn2" type="button">Logout</button>
+      <div id="supportWallet" class="wallet-box" style="display:none"></div>
+      <div class="form-group" id="supportTxGroup"><label>TX hash</label><input id="supportTx" /></div>
+      <button class="btn btn-primary" id="submitSupport" type="button">Send Support</button>
+      <div class="success-msg" id="supportOk"></div>
     </div>
+  </div>
 
-    <div class="dash-nav" id="dashNav">
-      <button class="tab active" type="button" data-panel="tickets">Buy Tickets</button>
-      <button class="tab" type="button" data-panel="mytickets">My Tickets</button>
-      <button class="tab" type="button" data-panel="support">Support Artist</button>
-      <button class="tab" type="button" data-panel="chat">Chat</button>
-      <button class="tab" type="button" data-panel="news">News</button>
-      <button class="tab" type="button" data-panel="contact">Management Contact</button>
-    </div>
-
-    <div class="dash-panel active" id="panel-tickets">
-      <div class="card">
-        <h2>Select a show</h2>
-        <div id="userEvents" class="grid-2" style="margin-top:1rem"></div>
-      </div>
-    </div>
-
-    <div class="dash-panel" id="panel-mytickets">
-      <div class="card table-wrap">
-        <h2 style="margin-bottom:.8rem">Tickets & Receipts</h2>
-        <table>
-          <thead>
-            <tr><th>Receipt</th><th>Event</th><th>Amount</th><th>Method</th><th>Status</th><th>Details</th></tr>
-          </thead>
-          <tbody id="myTicketsBody"></tbody>
-        </table>
-        <div id="myTicketsEmpty" class="empty">No tickets yet.</div>
-      </div>
-    </div>
-
-    <div class="dash-panel" id="panel-support">
-      <div class="card" style="max-width:560px">
-        <h2>Support Noah Nine</h2>
-        <p class="section-sub">Pay with USDT, BTC, TRX — or contact management.</p>
-        <div class="form-group"><label>Amount (USD)</label><input type="number" id="supportAmount" min="1" step="0.01" /></div>
-        <div class="form-group"><label>Message</label><textarea id="supportMessage"></textarea></div>
-        <div class="pay-options" id="supportPayOptions">
-          <label class="pay-option"><input type="radio" name="supportPay" value="BTC" /> BTC</label>
-          <label class="pay-option"><input type="radio" name="supportPay" value="USDT" /> USDT</label>
-          <label class="pay-option"><input type="radio" name="supportPay" value="TRX" /> TRX</label>
-          <label class="pay-option"><input type="radio" name="supportPay" value="CONTACT" /> Contact Management</label>
-        </div>
-        <div id="supportWallet" class="wallet-box" style="display:none"></div>
-        <div class="form-group" id="supportTxGroup"><label>TX hash</label><input id="supportTx" /></div>
-        <button class="btn btn-primary" id="submitSupport" type="button">Send Support</button>
-        <div class="success-msg" id="supportOk"></div>
-      </div>
-    </div>
-
-    <div class="dash-panel" id="panel-chat">
-      <div class="card" style="height:520px;display:flex;flex-direction:column;padding:0;overflow:hidden">
-        <div class="chat-head"><strong>Chat · Noah Nine Management</strong></div>
-        <div class="chat-messages" id="userChatMessages"></div>
-        <div class="chat-input-row">
-          <input id="userChatInput" placeholder="Type a message..." />
-          <button class="btn btn-primary" id="userChatSend" type="button">Send</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="dash-panel" id="panel-news">
-      <div class="grid-2" id="userNews"></div>
-    </div>
-
-    <div class="dash-panel" id="panel-contact">
-      <div class="card">
-        <h2>Management Contact</h2>
-        <div class="contact-box" id="dashContact"></div>
-        <p style="margin-top:.8rem;color:var(--muted)">For bank transfers, use Chat so management can confirm payment.</p>
+  <div class="dash-panel" id="panel-chat">
+    <div class="card" style="height:520px;display:flex;flex-direction:column;padding:0;overflow:hidden">
+      <div class="chat-head"><strong>Chat · Noah Nine Management</strong></div>
+      <div class="chat-messages" id="userChatMessages"></div>
+      <div class="chat-input-row">
+        <input id="userChatInput" placeholder="Type a message..." />
+        <button class="btn btn-primary" id="userChatSend" type="button">Send</button>
       </div>
     </div>
   </div>
 
-  <!-- Checkout modal -->
-  <div class="modal-overlay" id="userTicketModal">
-    <div class="modal">
-      <h2>Checkout</h2>
-      <div id="uSelectedEvent" class="card" style="margin-bottom:.8rem"></div>
-      <div class="form-group"><label>Quantity</label><input type="number" id="uQty" min="1" value="1" /></div>
-      <div class="pay-options" id="uPayOpts">
-        <label class="pay-option"><input type="radio" name="uPay" value="BTC" /> BTC</label>
-        <label class="pay-option"><input type="radio" name="uPay" value="USDT" /> USDT</label>
-        <label class="pay-option"><input type="radio" name="uPay" value="TRX" /> TRX</label>
-        <label class="pay-option"><input type="radio" name="uPay" value="CONTACT" /> Contact Management (Bank Transfer)</label>
-      </div>
-      <div id="uWallet" class="wallet-box" style="display:none"></div>
-      <div id="uContactHint" class="contact-box" style="display:none">
-        After submit, open <strong>Chat</strong> and mention your bank transfer + receipt code.
-      </div>
-      <div class="form-group" id="uTxGroup"><label>TX hash</label><input id="uTx" /></div>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" id="uTicketClose" type="button">Cancel</button>
-        <button class="btn btn-primary" id="uTicketPay" type="button">Submit</button>
-      </div>
-    </div>
+  <div class="dash-panel" id="panel-news">
+    <div class="grid-2" id="userNews"></div>
   </div>
 
-  <button class="chat-fab" id="dashChatFab" type="button" style="display:none" title="Chat">💬</button>
+  <div class="dash-panel" id="panel-contact">
+    <div class="card">
+      <h2>Management Contact</h2>
+      <div class="contact-box" id="dashContact"></div>
+      <p style="margin-top:.8rem;color:var(--muted)">For bank transfers, use Chat so management can confirm payment.</p>
+    </div>
+  </div>
+</div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+<!-- Checkout modal: hidden by default via inline style -->
+<div class="modal-overlay" id="userTicketModal" style="display:none">
+  <div class="modal">
+    <h2>Checkout</h2>
+    <div id="uSelectedEvent" class="card" style="margin-bottom:.8rem"></div>
+    <div class="form-group"><label>Quantity</label><input type="number" id="uQty" min="1" value="1" /></div>
+    <div class="pay-options" id="uPayOpts">
+      <label class="pay-option"><input type="radio" name="uPay" value="BTC" /> BTC</label>
+      <label class="pay-option"><input type="radio" name="uPay" value="USDT" /> USDT</label>
+      <label class="pay-option"><input type="radio" name="uPay" value="TRX" /> TRX</label>
+      <label class="pay-option"><input type="radio" name="uPay" value="CONTACT" /> Contact Management (Bank Transfer)</label>
+    </div>
+    <div id="uWallet" class="wallet-box" style="display:none"></div>
+    <div id="uContactHint" class="contact-box" style="display:none">
+      After submit, open <strong>Chat</strong> and mention your bank transfer + receipt code.
+    </div>
+    <div class="form-group" id="uTxGroup"><label>TX hash</label><input id="uTx" /></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="uTicketClose" type="button">Cancel</button>
+      <button class="btn btn-primary" id="uTicketPay" type="button">Submit</button>
+    </div>
+  </div>
+</div>
 
-    function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-    function fmtDate(str){if(!str)return"";try{return new Date(str+"T00:00:00").toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}catch{return str;}}
-    function uid(){return db.ref().push().key;}
-    function receiptCode(){return "NN-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();}
-    function playBeep(){
-      try{
-        const ctx=new(window.AudioContext||window.webkitAudioContext)();
-        const o=ctx.createOscillator(),g=ctx.createGain();
-        o.connect(g);g.connect(ctx.destination);o.frequency.value=880;o.type="sine";
-        g.gain.setValueAtTime(.25,ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.25);
-        o.start();o.stop(ctx.currentTime+.25);
-      }catch(_){}
-    }
-    function logout(){auth.signOut().then(()=>location.href="index.html");}
+<button class="chat-fab" id="dashChatFab" type="button" style="display:none" title="Chat">💬</button>
 
-    let currentUser=null, profile=null, wallets={}, contactInfo={}, selectedEvent=null, lastChatKey=null;
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("logoutBtn").onclick = logout;
-      document.getElementById("logoutBtn2").onclick = logout;
-      bindAuthUI();
-      loadContactAndWallets();
+function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function fmtDate(str){if(!str)return"";try{return new Date(str+"T00:00:00").toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}catch{return str;}}
+function uid(){return db.ref().push().key;}
+function receiptCode(){return "NN-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();}
+function playBeep(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);o.frequency.value=880;o.type="sine";
+    g.gain.setValueAtTime(.25,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.25);
+    o.start();o.stop(ctx.currentTime+.25);
+  }catch(_){}
+}
+function logout(){auth.signOut().then(()=>location.href="index.html");}
 
-      auth.onAuthStateChanged(async (user) => {
-        if (!user) { currentUser=null; profile=null; showAuth(); return; }
-        currentUser = user;
-        const snap = await db.ref("users/"+user.uid).once("value");
-        profile = snap.val() || { username: user.email, email: user.email, role: "user" };
-        if (profile.role === "admin") {
-          // optional auto-redirect: location.href = "admin.html";
-        }
-        showDashboard();
-      });
+let currentUser=null, profile=null, wallets={}, contactInfo={}, selectedEvent=null, lastChatKey=undefined;
 
-      const params = new URLSearchParams(location.search);
-      if (params.get("mode") === "register") switchToRegister();
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("logoutBtn").onclick=logout;
+  document.getElementById("logoutBtn2").onclick=logout;
+  bindAuthUI();
+  loadContactAndWallets();
+  bindCheckout();
+
+  auth.onAuthStateChanged(async(user)=>{
+    if(!user){currentUser=null;profile=null;showAuth();return;}
+    currentUser=user;
+    const snap=await db.ref("users/"+user.uid).once("value");
+    profile=snap.val()||{username:user.email,email:user.email,role:"user"};
+    showDashboard();
+  });
+
+  if(new URLSearchParams(location.search).get("mode")==="register") switchToRegister();
+});
+
+/* ---------- Auth view ---------- */
+function showAuth(){
+  document.getElementById("authShell").style.display="grid";
+  document.getElementById("dashboard").style.display="none";
+  document.getElementById("logoutBtn").style.display="none";
+  document.getElementById("dashChatFab").style.display="none";
+  closeCheckout();
+}
+function showDashboard(){
+  document.getElementById("authShell").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+  document.getElementById("logoutBtn").style.display="";
+  document.getElementById("dashChatFab").style.display="";
+  document.getElementById("dashName").textContent=profile.username||"Fan";
+  bindDashNav();
+  loadUserEvents();
+  loadMyTickets();
+  loadUserNews();
+  renderContact();
+  startUserChat();
+  bindSupport();
+  document.getElementById("dashChatFab").onclick=()=>openPanel("chat");
+  if(location.hash==="#support") openPanel("support");
+}
+function openPanel(name){
+  document.querySelectorAll("#dashNav .tab").forEach(t=>t.classList.toggle("active",t.dataset.panel===name));
+  document.querySelectorAll(".dash-panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("panel-"+name).classList.add("active");
+}
+function bindDashNav(){
+  document.querySelectorAll("#dashNav .tab").forEach(t=>{t.onclick=()=>openPanel(t.dataset.panel);});
+}
+
+/* ---------- Auth forms ---------- */
+function bindAuthUI(){
+  const loginForm=document.getElementById("loginForm");
+  document.getElementById("switchAuth").onclick=(e)=>{
+    e.preventDefault();
+    if(loginForm.style.display==="none") switchToLogin(); else switchToRegister();
+  };
+  loginForm.onsubmit=async(e)=>{
+    e.preventDefault();hideMsg();
+    try{
+      await auth.signInWithEmailAndPassword(
+        document.getElementById("loginEmail").value.trim(),
+        document.getElementById("loginPassword").value);
+    }catch(err){showErr(err.message);}
+  };
+  document.getElementById("registerForm").onsubmit=async(e)=>{
+    e.preventDefault();hideMsg();
+    const username=document.getElementById("regUsername").value.trim();
+    const email=document.getElementById("regEmail").value.trim();
+    const password=document.getElementById("regPassword").value;
+    try{
+      const cred=await auth.createUserWithEmailAndPassword(email,password);
+      await db.ref("users/"+cred.user.uid).set({username,email,role:"user",createdAt:Date.now()});
+      showOk("Welcome to the Noah Nine team!");
+    }catch(err){showErr(err.message);}
+  };
+  document.getElementById("showMgmtContact").onclick=()=>{
+    const b=document.getElementById("mgmtContactBox");
+    b.style.display=b.style.display==="none"?"block":"none";
+  };
+  document.getElementById("showSupportHint").onclick=()=>{
+    showErr("Login or register first, then open Support Artist in your dashboard.");
+  };
+}
+function switchToRegister(){
+  document.getElementById("loginForm").style.display="none";
+  document.getElementById("registerForm").style.display="block";
+  document.getElementById("authTitle").textContent="Join Noah Nine Team";
+  document.getElementById("authSub").textContent="Create your official fan account";
+  document.getElementById("switchText").textContent="Already have an account?";
+  document.getElementById("switchAuth").textContent="Login";
+}
+function switchToLogin(){
+  document.getElementById("loginForm").style.display="block";
+  document.getElementById("registerForm").style.display="none";
+  document.getElementById("authTitle").textContent="Welcome back";
+  document.getElementById("authSub").textContent="Login to your Noah Nine fan account";
+  document.getElementById("switchText").textContent="New here?";
+  document.getElementById("switchAuth").textContent="Create account";
+}
+function showErr(m){const e=document.getElementById("authError");e.style.display="block";e.textContent=m;}
+function showOk(m){const e=document.getElementById("authSuccess");e.style.display="block";e.textContent=m;}
+function hideMsg(){document.getElementById("authError").style.display="none";document.getElementById("authSuccess").style.display="none";}
+
+/* ---------- Contact + wallets ---------- */
+function loadContactAndWallets(){
+  db.ref("cryptoWallets").on("value",s=>{wallets=s.val()||{};});
+  db.ref("contactInfo").on("value",s=>{
+    contactInfo=s.val()||{};
+    renderContact();
+  });
+}
+function renderContact(){
+  const html=`<strong>Email:</strong> ${esc(contactInfo.email||"—")}<br>
+    <strong>Phone:</strong> ${esc(contactInfo.phone||"—")}<br>
+    <strong>Notes:</strong> ${esc(contactInfo.notes||"—")}`;
+  document.getElementById("mgmtContactBox").innerHTML=html;
+  document.getElementById("dashContact").innerHTML=html;
+}
+
+/* ---------- Buy tickets (dashboard) ---------- */
+function loadUserEvents(){
+  db.ref("events").on("value",snap=>{
+    const list=Object.entries(snap.val()||{}).map(([id,e])=>({id,...e}))
+      .filter(e=>e.status==="upcoming"||e.status==="current")
+      .sort((a,b)=>(a.eventDate||"").localeCompare(b.eventDate||""));
+    const el=document.getElementById("userEvents");
+    if(!list.length){el.innerHTML='<div class="empty">No upcoming shows.</div>';return;}
+    el.innerHTML=list.map(e=>`<div class="card">
+      <span class="badge badge-${esc(e.status)}">${esc(e.status)}</span>
+      <h3 style="margin-top:.4rem">${esc(e.title)}</h3>
+      <div class="meta">${fmtDate(e.eventDate)} · ${esc(e.venue||"")}</div>
+      <div><strong>$${Number(e.ticketPrice||0).toFixed(2)}</strong></div>
+      <button class="btn btn-primary btn-sm" style="margin-top:.7rem" type="button" data-id="${e.id}">Buy Tickets</button>
+    </div>`).join("");
+    el.querySelectorAll("button[data-id]").forEach(btn=>{
+      btn.onclick=()=>openCheckout(list.find(x=>x.id===btn.dataset.id));
     });
+  });
+}
 
-    function showAuth(){
-      document.getElementById("authShell").style.display="grid";
-      document.getElementById("dashboard").style.display="none";
-      document.getElementById("logoutBtn").style.display="none";
-      document.getElementById("dashChatFab").style.display="none";
-    }
-    function showDashboard(){
-      document.getElementById("authShell").style.display="none";
-      document.getElementById("dashboard").style.display="block";
-      document.getElementById("logoutBtn").style.display="";
-      document.getElementById("dashChatFab").style.display="";
-      document.getElementById("dashName").textContent = profile.username || "Fan";
-      bindDashNav();
-      loadUserEvents();
-      loadMyTickets();
-      loadUserNews();
-      renderContact();
-      startUserChat();
-      bindSupport();
-      bindCheckout();
-      document.getElementById("dashChatFab").onclick = () => openPanel("chat");
-      if (location.hash === "#support") openPanel("support");
-    }
-    function openPanel(name){
-      document.querySelectorAll("#dashNav .tab").forEach((t)=>t.classList.toggle("active", t.dataset.panel===name));
-      document.querySelectorAll(".dash-panel").forEach((p)=>p.classList.remove("active"));
-      document.getElementById("panel-"+name).classList.add("active");
-    }
-    function bindDashNav(){
-      document.querySelectorAll("#dashNav .tab").forEach((tab)=>{
-        tab.onclick = () => openPanel(tab.dataset.panel);
-      });
-    }
+function bindCheckout(){
+  document.getElementById("uTicketClose").onclick=closeCheckout;
+  document.getElementById("uTicketPay").onclick=submitUserTicket;
+  document.getElementById("userTicketModal").addEventListener("click",(e)=>{
+    if(e.target.id==="userTicketModal") closeCheckout();
+  });
+  document.querySelectorAll("#uPayOpts .pay-option").forEach(opt=>{
+    opt.addEventListener("click",()=>{
+      opt.querySelector("input").checked=true;
+      document.querySelectorAll("#uPayOpts .pay-option").forEach(o=>o.classList.remove("selected"));
+      opt.classList.add("selected");
+      onUPayChange();
+    });
+  });
+}
+function onUPayChange(){
+  const m=document.querySelector('input[name="uPay"]:checked')?.value;
+  const w=document.getElementById("uWallet"), c=document.getElementById("uContactHint"), t=document.getElementById("uTxGroup");
+  if(!m){w.style.display="none";c.style.display="none";return;}
+  if(m==="CONTACT"){w.style.display="none";c.style.display="block";t.style.display="none";}
+  else{c.style.display="none";t.style.display="block";w.style.display="block";
+    w.innerHTML=`<strong>${m}:</strong><br>${esc(wallets[m]||"Not configured")}`;}
+}
+function openCheckout(event){
+  selectedEvent=event;
+  document.getElementById("uSelectedEvent").innerHTML=`<strong>${esc(event.title)}</strong><br>${fmtDate(event.eventDate)} · $${Number(event.ticketPrice||0).toFixed(2)}`;
+  const m=document.getElementById("userTicketModal");
+  m.classList.add("open");
+  m.style.display="grid";
+}
+function closeCheckout(){
+  const m=document.getElementById("userTicketModal");
+  if(m){m.classList.remove("open");m.style.display="none";}
+  document.querySelectorAll('#uPayOpts input[name="uPay"]').forEach(r=>r.checked=false);
+  document.querySelectorAll("#uPayOpts .pay-option").forEach(o=>o.classList.remove("selected"));
+  document.getElementById("uWallet").style.display="none";
+  document.getElementById("uContactHint").style.display="none";
+  document.getElementById("uTxGroup").style.display="block";
+  document.getElementById("uTx").value="";
+}
+async function submitUserTicket(){
+  const qty=Math.max(1,parseInt(document.getElementById("uQty").value,10)||1);
+  const method=document.querySelector('input[name="uPay"]:checked')?.value;
+  const tx=document.getElementById("uTx").value.trim();
+  if(!method) return alert("Choose payment method");
+  if(method!=="CONTACT"&&!tx) return alert("Enter TX hash");
+  const id=uid(), code=receiptCode(), amount=Number(selectedEvent.ticketPrice||0)*qty;
+  await db.ref("tickets/"+id).set({
+    id,userId:currentUser.uid,eventId:selectedEvent.id,
+    buyerName:profile.username,buyerEmail:profile.email||currentUser.email,
+    quantity:qty,paymentMethod:method,
+    paymentCurrency:method==="CONTACT"?"BANK":method,txHash:tx||"",amount,
+    status:method==="CONTACT"?"awaiting_contact":"pending",receiptCode:code,
+    eventTitle:selectedEvent.title,eventDate:selectedEvent.eventDate,
+    eventTime:selectedEvent.eventTime||"",venue:selectedEvent.venue||"",
+    location:selectedEvent.location||"",createdAt:Date.now()
+  });
+  closeCheckout();
+  alert("Submitted. Reference: "+code+(method==="CONTACT"?" — message management in Chat.":" — awaiting approval."));
+  openPanel("mytickets");
+}
 
-    function bindAuthUI(){
-      const loginForm=document.getElementById("loginForm");
-      const regForm=document.getElementById("registerForm");
-      document.getElementById("switchAuth").onclick = (e) => {
-        e.preventDefault();
-        if (loginForm.style.display==="none") switchToLogin(); else switchToRegister();
-      };
-      loginForm.onsubmit = async (e) => {
-        e.preventDefault(); hideMsg();
-        try {
-          await auth.signInWithEmailAndPassword(
-            document.getElementById("loginEmail").value.trim(),
-            document.getElementById("loginPassword").value
-          );
-        } catch (err) { showErr(err.message); }
-      };
-      regForm.onsubmit = async (e) => {
-        e.preventDefault(); hideMsg();
-        const username=document.getElementById("regUsername").value.trim();
-        const email=document.getElementById("regEmail").value.trim();
-        const password=document.getElementById("regPassword").value;
-        try {
-          const cred = await auth.createUserWithEmailAndPassword(email, password);
-          await db.ref("users/"+cred.user.uid).set({
-            username, email, role: "user", createdAt: Date.now()
-          });
-          showOk("Welcome to the Noah Nine team!");
-        } catch (err) { showErr(err.message); }
-      };
-      document.getElementById("showMgmtContact").onclick = () => {
-        const b=document.getElementById("mgmtContactBox");
-        b.style.display = b.style.display==="none" ? "block" : "none";
-      };
-      document.getElementById("showSupportHint").onclick = () => {
-        showErr("Login or register first, then open Support Artist in your dashboard.");
-      };
-    }
-    function switchToRegister(){
-      document.getElementById("loginForm").style.display="none";
-      document.getElementById("registerForm").style.display="block";
-      document.getElementById("authTitle").textContent="Join Noah Nine Team";
-      document.getElementById("authSub").textContent="Create your official fan account";
-      document.getElementById("switchText").textContent="Already have an account?";
-      document.getElementById("switchAuth").textContent="Login";
-    }
-    function switchToLogin(){
-      document.getElementById("loginForm").style.display="block";
-      document.getElementById("registerForm").style.display="none";
-      document.getElementById("authTitle").textContent="Welcome back";
-      document.getElementById("authSub").textContent="Login to your Noah Nine fan account";
-      document.getElementById("switchText").textContent="New here?";
-      document.getElementById("switchAuth").textContent="Create account";
-    }
-    function showErr(m){const e=document.getElementById("authError");e.style.display="block";e.textContent=m;}
-    function showOk(m){const e=document.getElementById("authSuccess");e.style.display="block";e.textContent=m;}
-    function hideMsg(){document.getElementById("authError").style.display="none";document.getElementById("authSuccess").style.display="none";}
+/* ---------- My tickets ---------- */
+function loadMyTickets(){
+  db.ref("tickets").orderByChild("userId").equalTo(currentUser.uid).on("value",snap=>{
+    const list=Object.values(snap.val()||{}).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    const body=document.getElementById("myTicketsBody");
+    const empty=document.getElementById("myTicketsEmpty");
+    if(!list.length){body.innerHTML="";empty.style.display="block";return;}
+    empty.style.display="none";
+    body.innerHTML=list.map(t=>`<tr>
+      <td><code>${esc(t.receiptCode)}</code></td>
+      <td>${esc(t.eventTitle)}<br><span class="meta">${fmtDate(t.eventDate)}</span></td>
+      <td>$${Number(t.amount||0).toFixed(2)} × ${t.quantity||1}</td>
+      <td>${esc(t.paymentMethod)}</td>
+      <td><span class="badge badge-${esc(t.status)}">${esc(t.status)}</span></td>
+      <td>${t.status==="approved"
+        ?`ID: ${esc(t.id)}<br>Venue: ${esc(t.venue||"")}<br>Location: ${esc(t.location||"")}<br>Time: ${esc(t.eventTime||"")}`
+        :"Full receipt after admin approval"}</td>
+    </tr>`).join("");
+  });
+}
 
-    function loadContactAndWallets(){
-      db.ref("cryptoWallets").on("value",(s)=>{wallets=s.val()||{};});
-      db.ref("contactInfo").on("value",(s)=>{
-        contactInfo=s.val()||{};
-        const html=`<strong>Email:</strong> ${esc(contactInfo.email||"—")}<br>
-          <strong>Phone:</strong> ${esc(contactInfo.phone||"—")}<br>
-          <strong>Notes:</strong> ${esc(contactInfo.notes||"—")}`;
-        document.getElementById("mgmtContactBox").innerHTML=html;
-        const d=document.getElementById("dashContact"); if(d) d.innerHTML=html;
-      });
-    }
-    function renderContact(){
-      document.getElementById("dashContact").innerHTML =
-        `<strong>Email:</strong> ${esc(contactInfo.email||"—")}<br>
-         <strong>Phone:</strong> ${esc(contactInfo.phone||"—")}<br>
-         <strong>Notes:</strong> ${esc(contactInfo.notes||"—")}`;
-    }
+/* ---------- Support ---------- */
+function bindSupport(){
+  document.querySelectorAll('input[name="supportPay"]').forEach(r=>{
+    r.onchange=()=>{
+      const m=document.querySelector('input[name="supportPay"]:checked')?.value;
+      const w=document.getElementById("supportWallet"), tg=document.getElementById("supportTxGroup");
+      if(!m){w.style.display="none";tg.style.display="none";return;}
+      if(m==="CONTACT"){w.style.display="none";tg.style.display="none";}
+      else{tg.style.display="block";w.style.display="block";
+        w.innerHTML=`<strong>${m}:</strong><br>${esc(wallets[m]||"Not configured")}`;}
+    };
+  });
+  document.getElementById("submitSupport").onclick=async()=>{
+    const amount=parseFloat(document.getElementById("supportAmount").value);
+    const message=document.getElementById("supportMessage").value.trim();
+    const method=document.querySelector('input[name="supportPay"]:checked')?.value;
+    const tx=document.getElementById("supportTx").value.trim();
+    if(!amount||amount<=0) return alert("Enter amount");
+    if(!method) return alert("Choose method");
+    if(method!=="CONTACT"&&!tx) return alert("Enter TX hash");
+    const id=uid();
+    await db.ref("supportPayments/"+id).set({
+      id,userId:currentUser.uid,username:profile.username,
+      amount,currency:method==="CONTACT"?"BANK":method,txHash:tx||"",
+      status:method==="CONTACT"?"awaiting_contact":"pending",
+      message,createdAt:Date.now()
+    });
+    const ok=document.getElementById("supportOk");
+    ok.style.display="block";
+    ok.textContent=method==="CONTACT"
+      ?"Request saved — open Chat to contact management."
+      :"Support payment submitted — pending admin confirmation.";
+    if(method==="CONTACT") openPanel("chat");
+  };
+}
 
-    function loadUserEvents(){
-      db.ref("events").on("value",(snap)=>{
-        const list=Object.entries(snap.val()||{}).map(([id,e])=>({id,...e}))
-          .filter(e=>e.status==="upcoming"||e.status==="current")
-          .sort((a,b)=>(a.eventDate||"").localeCompare(b.eventDate||""));
-        const el=document.getElementById("userEvents");
-        if(!list.length){el.innerHTML='<div class="empty">No upcoming shows.</div>';return;}
-        el.innerHTML=list.map(e=>`
-          <div class="card">
-            <span class="badge badge-${esc(e.status)}">${esc(e.status)}</span>
-            <h3 style="margin-top:.4rem">${esc(e.title)}</h3>
-            <div class="meta">${fmtDate(e.eventDate)} · ${esc(e.venue||"")}</div>
-            <div><strong>$${Number(e.ticketPrice||0).toFixed(2)}</strong></div>
-            <button class="btn btn-primary btn-sm" style="margin-top:.7rem" type="button" data-id="${e.id}">Buy Tickets</button>
-          </div>`).join("");
-        el.querySelectorAll("button[data-id]").forEach(btn=>{
-          btn.onclick=()=>openCheckout(list.find(x=>x.id===btn.dataset.id));
-        });
-      });
-    }
+/* ---------- News ---------- */
+function loadUserNews(){
+  db.ref("notifications").on("value",snap=>{
+    const list=Object.entries(snap.val()||{}).map(([id,n])=>({id,...n}))
+      .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    const el=document.getElementById("userNews");
+    if(!list.length){el.innerHTML='<div class="empty">No news.</div>';return;}
+    el.innerHTML=list.map(n=>`<div class="card"><h3>${esc(n.title)}</h3>
+      <div class="meta">${n.createdAt?new Date(n.createdAt).toLocaleString():""}</div>
+      <p style="white-space:pre-wrap">${esc(n.content||"")}</p></div>`).join("");
+  });
+}
 
-    function bindCheckout(){
-      document.getElementById("uTicketClose").onclick=()=>document.getElementById("userTicketModal").classList.remove("open");
-      document.getElementById("uTicketPay").onclick=submitUserTicket;
-      document.querySelectorAll('input[name="uPay"]').forEach(r=>{
-        r.onchange=()=>{
-          const m=document.querySelector('input[name="uPay"]:checked')?.value;
-          const w=document.getElementById("uWallet"), c=document.getElementById("uContactHint"), t=document.getElementById("uTxGroup");
-          if(m==="CONTACT"){w.style.display="none";c.style.display="block";t.style.display="none";}
-          else if(m){c.style.display="none";t.style.display="block";w.style.display="block";w.innerHTML=`<strong>${m}:</strong><br>${esc(wallets[m]||"Not configured")}`;}
-        };
-      });
-    }
-    function openCheckout(event){
-      selectedEvent=event;
-      document.getElementById("uSelectedEvent").innerHTML=`<strong>${esc(event.title)}</strong><br>${fmtDate(event.eventDate)} · $${Number(event.ticketPrice||0).toFixed(2)}`;
-      document.getElementById("userTicketModal").classList.add("open");
-    }
-    async function submitUserTicket(){
-      const qty=Math.max(1,parseInt(document.getElementById("uQty").value,10)||1);
-      const method=document.querySelector('input[name="uPay"]:checked')?.value;
-      const tx=document.getElementById("uTx").value.trim();
-      if(!method) return alert("Choose payment method");
-      if(method!=="CONTACT" && !tx) return alert("Enter TX hash");
-      const id=uid(), code=receiptCode(), amount=Number(selectedEvent.ticketPrice||0)*qty;
-      await db.ref("tickets/"+id).set({
-        id, userId: currentUser.uid, eventId: selectedEvent.id,
-        buyerName: profile.username, buyerEmail: profile.email || currentUser.email,
-        quantity: qty, paymentMethod: method,
-        paymentCurrency: method==="CONTACT"?"BANK":method, txHash: tx||"", amount,
-        status: method==="CONTACT"?"awaiting_contact":"pending", receiptCode: code,
-        eventTitle: selectedEvent.title, eventDate: selectedEvent.eventDate,
-        eventTime: selectedEvent.eventTime||"", venue: selectedEvent.venue||"",
-        location: selectedEvent.location||"", createdAt: Date.now()
-      });
-      document.getElementById("userTicketModal").classList.remove("open");
-      alert("Submitted. Reference: "+code+(method==="CONTACT"?" — message management in Chat.":" — awaiting approval."));
-      openPanel("mytickets");
-    }
-
-    function loadMyTickets(){
-      db.ref("tickets").orderByChild("userId").equalTo(currentUser.uid).on("value",(snap)=>{
-        const list=Object.values(snap.val()||{}).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-        const body=document.getElementById("myTicketsBody");
-        const empty=document.getElementById("myTicketsEmpty");
-        if(!list.length){body.innerHTML="";empty.style.display="block";return;}
-        empty.style.display="none";
-        body.innerHTML=list.map(t=>`
-          <tr>
-            <td><code>${esc(t.receiptCode)}</code></td>
-            <td>${esc(t.eventTitle)}<br><span class="meta">${fmtDate(t.eventDate)}</span></td>
-            <td>$${Number(t.amount||0).toFixed(2)} × ${t.quantity||1}</td>
-            <td>${esc(t.paymentMethod)}</td>
-            <td><span class="badge badge-${esc(t.status)}">${esc(t.status)}</span></td>
-            <td>${t.status==="approved"
-              ? `ID: ${esc(t.id)}<br>Venue: ${esc(t.venue||"")}<br>Location: ${esc(t.location||"")}<br>Time: ${esc(t.eventTime||"")}`
-              : "Full receipt after admin approval"}</td>
-          </tr>`).join("");
-      });
-    }
-
-    function bindSupport(){
-      document.querySelectorAll('input[name="supportPay"]').forEach(r=>{
-        r.onchange=()=>{
-          const m=document.querySelector('input[name="supportPay"]:checked')?.value;
-          const w=document.getElementById("supportWallet"), tg=document.getElementById("supportTxGroup");
-          if(m==="CONTACT"){w.style.display="none";tg.style.display="none";}
-          else if(m){tg.style.display="block";w.style.display="block";w.innerHTML=`<strong>${m}:</strong><br>${esc(wallets[m]||"Not configured")}`;}
-        };
-      });
-      document.getElementById("submitSupport").onclick=async()=>{
-        const amount=parseFloat(document.getElementById("supportAmount").value);
-        const message=document.getElementById("supportMessage").value.trim();
-        const method=document.querySelector('input[name="supportPay"]:checked')?.value;
-        const tx=document.getElementById("supportTx").value.trim();
-        if(!amount||amount<=0) return alert("Enter amount");
-        if(!method) return alert("Choose method");
-        if(method!=="CONTACT" && !tx) return alert("Enter TX hash");
-        const id=uid();
-        await db.ref("supportPayments/"+id).set({
-          id, userId: currentUser.uid, username: profile.username,
-          amount, currency: method==="CONTACT"?"BANK":method, txHash: tx||"",
-          status: method==="CONTACT"?"awaiting_contact":"pending",
-          message, createdAt: Date.now()
-        });
-        const ok=document.getElementById("supportOk");
-        ok.style.display="block";
-        ok.textContent=method==="CONTACT"
-          ? "Request saved — open Chat to contact management."
-          : "Support payment submitted — pending admin confirmation.";
-        if(method==="CONTACT") openPanel("chat");
-      };
-    }
-
-    function loadUserNews(){
-      db.ref("notifications").on("value",(snap)=>{
-        const list=Object.entries(snap.val()||{}).map(([id,n])=>({id,...n}))
-          .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-        const el=document.getElementById("userNews");
-        if(!list.length){el.innerHTML='<div class="empty">No news.</div>';return;}
-        el.innerHTML=list.map(n=>`
-          <div class="card"><h3>${esc(n.title)}</h3>
-          <div class="meta">${n.createdAt?new Date(n.createdAt).toLocaleString():""}</div>
-          <p style="white-space:pre-wrap">${esc(n.content||"")}</p></div>`).join("");
-      });
-    }
-
-    function startUserChat(){
-      const room = currentUser.uid;
-      const box = document.getElementById("userChatMessages");
-      // ensure room meta
-      db.ref("chatMeta/"+room).update({
-        userId: currentUser.uid,
-        username: profile.username || currentUser.email,
-        lastAt: Date.now()
-      });
-      if (lastChatKey === null) lastChatKey = undefined;
-      db.ref("chats/"+room).off();
-      db.ref("chats/"+room).on("value",(snap)=>{
-        const data=snap.val()||{};
-        const msgs=Object.entries(data).map(([id,m])=>({id,...m})).sort((a,b)=>(a.at||0)-(b.at||0));
-        const newest = msgs.length ? msgs[msgs.length-1].id : null;
-        if (lastChatKey !== undefined && newest && newest !== lastChatKey) playBeep();
-        lastChatKey = newest;
-        box.innerHTML = msgs.length ? msgs.map(m=>`
-          <div class="msg ${m.sender==="admin"?"admin":"user"}">
-            <div class="who">${esc(m.sender==="admin"?"Management":m.username||"You")} · ${m.at?new Date(m.at).toLocaleTimeString():""}</div>
-            ${esc(m.text)}
-          </div>`).join("") : '<div class="empty">Say hello to management.</div>';
-        box.scrollTop = box.scrollHeight;
-      });
-      document.getElementById("userChatSend").onclick = sendUserChat;
-      document.getElementById("userChatInput").onkeydown = (e) => {
-        if (e.key === "Enter") sendUserChat();
-      };
-    }
-    async function sendUserChat(){
-      const input=document.getElementById("userChatInput");
-      const text=input.value.trim();
-      if(!text) return;
-      const room=currentUser.uid;
-      await db.ref("chats/"+room).push({
-        text, sender: "user", username: profile.username || "Fan",
-        userId: currentUser.uid, at: Date.now()
-      });
-      await db.ref("chatMeta/"+room).update({ lastAt: Date.now(), lastMsg: text, username: profile.username });
-      input.value="";
-      playBeep();
-    }
-  </script>
+/* ---------- Chat ---------- */
+function startUserChat(){
+  const room=currentUser.uid;
+  const box=document.getElementById("userChatMessages");
+  db.ref("chatMeta/"+room).update({
+    userId:currentUser.uid,
+    username:profile.username||currentUser.email,
+    lastAt:Date.now()
+  });
+  db.ref("chats/"+room).off();
+  db.ref("chats/"+room).on("value",snap=>{
+    const data=snap.val()||{};
+    const msgs=Object.entries(data).map(([id,m])=>({id,...m})).sort((a,b)=>(a.at||0)-(b.at||0));
+    const newest=msgs.length?msgs[msgs.length-1].id:null;
+    if(lastChatKey!==undefined&&newest&&newest!==lastChatKey) playBeep();
+    lastChatKey=newest;
+    box.innerHTML=msgs.length?msgs.map(m=>`
+      <div class="msg ${m.sender==="admin"?"admin":"user"}">
+        <div class="who">${esc(m.sender==="admin"?"Management":m.username||"You")} · ${m.at?new Date(m.at).toLocaleTimeString():""}</div>
+        ${esc(m.text)}
+      </div>`).join(""):'<div class="empty">Say hello to management.</div>';
+    box.scrollTop=box.scrollHeight;
+  });
+  document.getElementById("userChatSend").onclick=sendUserChat;
+  document.getElementById("userChatInput").onkeydown=(e)=>{if(e.key==="Enter")sendUserChat();};
+}
+async function sendUserChat(){
+  const input=document.getElementById("userChatInput");
+  const text=input.value.trim();
+  if(!text) return;
+  const room=currentUser.uid;
+  await db.ref("chats/"+room).push({
+    text,sender:"user",username:profile.username||"Fan",
+    userId:currentUser.uid,at:Date.now()
+  });
+  await db.ref("chatMeta/"+room).update({lastAt:Date.now(),lastMsg:text,username:profile.username});
+  input.value="";
+  playBeep();
+}
+</script>
 </body>
 </html>
