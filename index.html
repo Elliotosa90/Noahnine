@@ -86,7 +86,8 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="ticketModal">
+<!-- Ticket modal — hidden by default via inline style so it can never render as a stray banner -->
+<div class="modal-overlay" id="ticketModal" style="display:none">
   <div class="modal">
     <h2>Buy Tickets</h2>
     <div id="ticketStepEvents">
@@ -143,21 +144,30 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-/* ---------- Helpers ---------- */
+/* ================= Helpers ================= */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
 function fmtDate(str){
   if(!str)return"";
   try{return new Date(str+"T00:00:00").toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
-  catch{return str;}
+  catch(e){return str;}
 }
+
 function uid(){return db.ref().push().key;}
-function receiptCode(){return "NN-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();}
 
-/* ---------- State ---------- */
-let allEvents=[], selectedEvent=null, ticketStep=1, wallets={}, contactInfo={};
+function receiptCode(){
+  return "NN-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
+}
 
-/* ---------- Init ---------- */
-document.addEventListener("DOMContentLoaded",()=>{
+/* ================= State ================= */
+var allEvents = [];
+var selectedEvent = null;
+var ticketStep = 1;
+var wallets = {};
+var contactInfo = {};
+
+/* ================= Init ================= */
+document.addEventListener("DOMContentLoaded", function(){
   bindCtaDropdown();
   bindChatPanel();
   bindTicketModal();
@@ -168,269 +178,377 @@ document.addEventListener("DOMContentLoaded",()=>{
   loadMeta();
 });
 
-/* ---------- CTA dropdown (fixed) ---------- */
+/* ================= CTA dropdown ================= */
 function bindCtaDropdown(){
-  const btn=document.getElementById("ctaBtn");
-  const menu=document.getElementById("ctaMenu");
+  var btn = document.getElementById("ctaBtn");
+  var menu = document.getElementById("ctaMenu");
 
-  btn.addEventListener("click",(e)=>{
+  btn.addEventListener("click", function(e){
     e.stopPropagation();
     e.preventDefault();
-    closeTicketModal();               // never leave a checkout open behind the menu
+    closeTicketModal();
     menu.classList.toggle("open");
   });
 
-  menu.querySelectorAll("button").forEach((b)=>{
-    b.addEventListener("click",(e)=>{
-      e.stopPropagation();
-      e.preventDefault();
-      menu.classList.remove("open");
-      const action=b.getAttribute("data-action");
-      if(action==="tickets"){
-        openTicketFlow();
-      }else if(action==="join"){
-        closeTicketModal();
-        window.location.href="users.html?mode=register";
-      }
-    });
+  var buttons = menu.querySelectorAll("button");
+  for(var i = 0; i < buttons.length; i++){
+    (function(b){
+      b.addEventListener("click", function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        menu.classList.remove("open");
+        var action = b.getAttribute("data-action");
+        if(action === "tickets"){
+          openTicketFlow();
+        } else if(action === "join"){
+          closeTicketModal();
+          window.location.href = "users.html?mode=register";
+        }
+      });
+    })(buttons[i]);
+  }
+
+  document.addEventListener("click", function(){
+    menu.classList.remove("open");
   });
-
-  document.addEventListener("click",()=>menu.classList.remove("open"));
 }
 
-/* ---------- Chat panel ---------- */
+/* ================= Chat panel ================= */
 function bindChatPanel(){
-  document.getElementById("chatFab").onclick=()=>document.getElementById("chatPanel").classList.toggle("open");
-  document.getElementById("closeChat").onclick=()=>document.getElementById("chatPanel").classList.remove("open");
+  document.getElementById("chatFab").onclick = function(){
+    document.getElementById("chatPanel").classList.toggle("open");
+  };
+  document.getElementById("closeChat").onclick = function(){
+    document.getElementById("chatPanel").classList.remove("open");
+  };
 }
 
-/* ---------- Loaders ---------- */
+/* ================= Loaders ================= */
 function loadMusic(){
-  db.ref("music").on("value",snap=>{
-    const list=Object.entries(snap.val()||{}).map(([id,m])=>({id,...m}))
-      .sort((a,b)=>(b.releaseDate||"").localeCompare(a.releaseDate||""));
-    const el=document.getElementById("musicList");
-    if(!list.length){el.innerHTML='<div class="empty">No music yet.</div>';return;}
-    el.innerHTML=list.map(m=>`<div class="card music-card">
-      <div class="music-cover">${m.coverUrl?`<img src="${esc(m.coverUrl)}" alt="">`:"N9"}</div>
-      <div>
-        <h3>${esc(m.title)}</h3>
-        <div class="meta">${esc(m.album||"Single")} · ${esc(m.releaseDate||"")}</div>
-        ${m.audioUrl?`<a href="${esc(m.audioUrl)}" target="_blank" rel="noopener">Listen</a>`:""}
-      </div></div>`).join("");
+  db.ref("music").on("value", function(snap){
+    var list = Object.keys(snap.val() || {}).map(function(id){
+      var m = snap.val()[id]; m.id = id; return m;
+    }).sort(function(a,b){ return (b.releaseDate||"").localeCompare(a.releaseDate||""); });
+
+    var el = document.getElementById("musicList");
+    if(!list.length){ el.innerHTML = '<div class="empty">No music yet.</div>'; return; }
+
+    var html = "";
+    for(var i=0;i<list.length;i++){
+      var m = list[i];
+      html += '<div class="card music-card">'
+        + '<div class="music-cover">' + (m.coverUrl ? '<img src="'+esc(m.coverUrl)+'" alt="">' : "N9") + '</div>'
+        + '<div><h3>'+esc(m.title)+'</h3>'
+        + '<div class="meta">'+esc(m.album||"Single")+' · '+esc(m.releaseDate||"")+'</div>'
+        + (m.audioUrl ? '<a href="'+esc(m.audioUrl)+'" target="_blank" rel="noopener">Listen</a>' : "")
+        + '</div></div>';
+    }
+    el.innerHTML = html;
   });
 }
 
 function loadEvents(){
-  db.ref("events").on("value",snap=>{
-    allEvents=Object.entries(snap.val()||{}).map(([id,e])=>({id,...e}))
-      .sort((a,b)=>(a.eventDate||"").localeCompare(b.eventDate||""));
-    renderEvents(document.querySelector("#eventTabs .tab.active")?.dataset.status||"all");
+  db.ref("events").on("value", function(snap){
+    var val = snap.val() || {};
+    allEvents = Object.keys(val).map(function(id){
+      var e = val[id]; e.id = id; return e;
+    }).sort(function(a,b){ return (a.eventDate||"").localeCompare(b.eventDate||""); });
+
+    var activeTab = document.querySelector("#eventTabs .tab.active");
+    renderEvents(activeTab ? activeTab.getAttribute("data-status") : "all");
   });
-  document.querySelectorAll("#eventTabs .tab").forEach(tab=>{
-    tab.onclick=()=>{
-      document.querySelectorAll("#eventTabs .tab").forEach(t=>t.classList.remove("active"));
-      tab.classList.add("active");
-      renderEvents(tab.dataset.status);
-    };
-  });
+
+  var tabs = document.querySelectorAll("#eventTabs .tab");
+  for(var i=0;i<tabs.length;i++){
+    (function(tab){
+      tab.onclick = function(){
+        for(var j=0;j<tabs.length;j++) tabs[j].classList.remove("active");
+        tab.classList.add("active");
+        renderEvents(tab.getAttribute("data-status"));
+      };
+    })(tabs[i]);
+  }
 }
 
 function renderEvents(status){
-  const el=document.getElementById("eventsList");
-  let list=status==="all"?allEvents:allEvents.filter(e=>e.status===status);
-  if(!list.length){el.innerHTML='<div class="empty">No events here.</div>';return;}
-  el.innerHTML=list.map(e=>`<div class="card">
-    <span class="badge badge-${esc(e.status||"upcoming")}">${esc(e.status||"upcoming")}</span>
-    <h3 style="margin-top:.5rem">${esc(e.title)}</h3>
-    <div class="meta">${fmtDate(e.eventDate)}${e.eventTime?" · "+esc(e.eventTime):""}</div>
-    <div class="meta">${esc(e.venue||"")}${e.location?" · "+esc(e.location):""}</div>
-    <p style="margin:.5rem 0;color:var(--muted);font-size:.92rem">${esc(e.description||"")}</p>
-    <div><strong>$${Number(e.ticketPrice||0).toFixed(2)}</strong> ${esc(e.ticketCurrency||"USD")}</div>
-    ${(e.status==="upcoming"||e.status==="current")
-      ?`<button class="btn btn-primary btn-sm" style="margin-top:.8rem" type="button" onclick="openTicketFlow('${e.id}')">Buy Ticket</button>`:""}
-  </div>`).join("");
+  var el = document.getElementById("eventsList");
+  var list = status === "all" ? allEvents : allEvents.filter(function(e){ return e.status === status; });
+  if(!list.length){ el.innerHTML = '<div class="empty">No events here.</div>'; return; }
+
+  var html = "";
+  for(var i=0;i<list.length;i++){
+    var e = list[i];
+    var buyable = (e.status === "upcoming" || e.status === "current");
+    html += '<div class="card">'
+      + '<span class="badge badge-'+esc(e.status||"upcoming")+'">'+esc(e.status||"upcoming")+'</span>'
+      + '<h3 style="margin-top:.5rem">'+esc(e.title)+'</h3>'
+      + '<div class="meta">'+fmtDate(e.eventDate)+(e.eventTime ? " · "+esc(e.eventTime) : "")+'</div>'
+      + '<div class="meta">'+esc(e.venue||"")+(e.location ? " · "+esc(e.location) : "")+'</div>'
+      + '<p style="margin:.5rem 0;color:var(--muted);font-size:.92rem">'+esc(e.description||"")+'</p>'
+      + '<div><strong>$'+Number(e.ticketPrice||0).toFixed(2)+'</strong> '+esc(e.ticketCurrency||"USD")+'</div>'
+      + (buyable ? '<button class="btn btn-primary btn-sm" style="margin-top:.8rem" type="button" data-eventid="'+e.id+'">Buy Ticket</button>' : "")
+      + '</div>';
+  }
+  el.innerHTML = html;
+
+  var buyBtns = el.querySelectorAll("button[data-eventid]");
+  for(var k=0;k<buyBtns.length;k++){
+    (function(b){
+      b.onclick = function(){ openTicketFlow(b.getAttribute("data-eventid")); };
+    })(buyBtns[k]);
+  }
 }
 
 function loadBio(){
-  db.ref("biography").on("value",snap=>{
-    document.getElementById("bioText").textContent=(snap.val()&&snap.val().text)||"Biography will appear once management publishes it.";
+  db.ref("biography").on("value", function(snap){
+    var v = snap.val();
+    document.getElementById("bioText").textContent =
+      (v && v.text) ? v.text : "Biography will appear once management publishes it.";
   });
 }
 
 function loadNews(){
-  db.ref("notifications").on("value",snap=>{
-    const list=Object.entries(snap.val()||{}).map(([id,n])=>({id,...n}))
-      .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    const el=document.getElementById("newsList");
-    if(!list.length){el.innerHTML='<div class="empty">No news yet.</div>';return;}
-    el.innerHTML=list.map(n=>`<div class="card">
-      <h3>${esc(n.title)}</h3>
-      <div class="meta">${n.createdAt?new Date(n.createdAt).toLocaleString():""}</div>
-      <p style="white-space:pre-wrap;color:#ddd9e8">${esc(n.content||"")}</p></div>`).join("");
+  db.ref("notifications").on("value", function(snap){
+    var val = snap.val() || {};
+    var list = Object.keys(val).map(function(id){
+      var n = val[id]; n.id = id; return n;
+    }).sort(function(a,b){ return (b.createdAt||0) - (a.createdAt||0); });
+
+    var el = document.getElementById("newsList");
+    if(!list.length){ el.innerHTML = '<div class="empty">No news yet.</div>'; return; }
+
+    var html = "";
+    for(var i=0;i<list.length;i++){
+      var n = list[i];
+      html += '<div class="card"><h3>'+esc(n.title)+'</h3>'
+        + '<div class="meta">'+(n.createdAt ? new Date(n.createdAt).toLocaleString() : "")+'</div>'
+        + '<p style="white-space:pre-wrap;color:#ddd9e8">'+esc(n.content||"")+'</p></div>';
+    }
+    el.innerHTML = html;
   });
 }
 
 function loadMeta(){
-  db.ref("cryptoWallets").on("value",s=>{wallets=s.val()||{};});
-  db.ref("contactInfo").on("value",s=>{
-    contactInfo=s.val()||{};
-    const box=document.getElementById("mgmtContactPublic");
-    if(box) box.innerHTML=`<strong>Management</strong><br>Email: ${esc(contactInfo.email||"—")}<br>Phone: ${esc(contactInfo.phone||"—")}<br>${esc(contactInfo.notes||"")}`;
+  db.ref("cryptoWallets").on("value", function(s){
+    wallets = s.val() || {};
+  });
+  db.ref("contactInfo").on("value", function(s){
+    contactInfo = s.val() || {};
+    var box = document.getElementById("mgmtContactPublic");
+    if(box){
+      box.innerHTML = '<strong>Management</strong><br>'
+        + 'Email: '+esc(contactInfo.email||"—")+'<br>'
+        + 'Phone: '+esc(contactInfo.phone||"—")+'<br>'
+        + esc(contactInfo.notes||"");
+    }
   });
 }
 
-/* ---------- Ticket modal ---------- */
+/* ================= Ticket modal ================= */
 function bindTicketModal(){
-  document.getElementById("ticketCancel").onclick=closeTicketModal;
-  document.getElementById("ticketBack").onclick=()=>{ticketStep=1;showTicketStep();};
-  document.getElementById("ticketNext").onclick=onTicketNext;
-  document.querySelectorAll("#payOptions .pay-option").forEach(opt=>{
-    opt.addEventListener("click",()=>{
-      opt.querySelector("input").checked=true;
-      document.querySelectorAll("#payOptions .pay-option").forEach(o=>o.classList.remove("selected"));
-      opt.classList.add("selected");
-      onPayMethodChange();
-    });
+  document.getElementById("ticketCancel").onclick = closeTicketModal;
+  document.getElementById("ticketBack").onclick = function(){
+    ticketStep = 1;
+    showTicketStep();
+  };
+  document.getElementById("ticketNext").onclick = onTicketNext;
+
+  document.getElementById("ticketModal").addEventListener("click", function(e){
+    if(e.target.id === "ticketModal") closeTicketModal();
   });
+
+  var opts = document.querySelectorAll("#payOptions .pay-option");
+  for(var i=0;i<opts.length;i++){
+    (function(opt){
+      opt.addEventListener("click", function(){
+        opt.querySelector("input").checked = true;
+        var all = document.querySelectorAll("#payOptions .pay-option");
+        for(var j=0;j<all.length;j++) all[j].classList.remove("selected");
+        opt.classList.add("selected");
+        onPayMethodChange();
+      });
+    })(opts[i]);
+  }
 }
 
 function closeTicketModal(){
-  const m=document.getElementById("ticketModal");
-  if(m) m.classList.remove("open");
-  ticketStep=1;
-  selectedEvent=null;
-  // reset payment UI for next open
-  document.querySelectorAll("#payOptions input[name='payMethod']").forEach(r=>r.checked=false);
-  document.querySelectorAll("#payOptions .pay-option").forEach(o=>o.classList.remove("selected"));
-  document.getElementById("walletDisplay").style.display="none";
-  document.getElementById("contactHint").style.display="none";
-  document.getElementById("txGroup").style.display="block";
-  document.getElementById("txHash").value="";
+  var m = document.getElementById("ticketModal");
+  if(m){
+    m.classList.remove("open");
+    m.style.display = "none";
+  }
+  ticketStep = 1;
+  selectedEvent = null;
+
+  var radios = document.querySelectorAll("#payOptions input[name='payMethod']");
+  for(var i=0;i<radios.length;i++) radios[i].checked = false;
+
+  var selOpts = document.querySelectorAll("#payOptions .pay-option");
+  for(var j=0;j<selOpts.length;j++) selOpts[j].classList.remove("selected");
+
+  document.getElementById("walletDisplay").style.display = "none";
+  document.getElementById("contactHint").style.display = "none";
+  document.getElementById("txGroup").style.display = "block";
+  document.getElementById("txHash").value = "";
 }
 
 function openTicketFlow(eventId){
-  ticketStep=1;
-  selectedEvent=null;
-  document.getElementById("ticketStepDone").style.display="none";
-  document.getElementById("ticketStepPay").style.display="none";
-  document.getElementById("ticketStepEvents").style.display="block";
-  document.getElementById("ticketNext").style.display="";
-  document.getElementById("ticketBack").style.display="none";
+  ticketStep = 1;
+  selectedEvent = null;
 
-  const buyable=allEvents.filter(e=>e.status==="upcoming"||e.status==="current");
-  const pick=document.getElementById("ticketEventsPick");
+  document.getElementById("ticketStepDone").style.display = "none";
+  document.getElementById("ticketStepPay").style.display = "none";
+  document.getElementById("ticketStepEvents").style.display = "block";
+  document.getElementById("ticketNext").style.display = "";
+  document.getElementById("ticketBack").style.display = "none";
+
+  var buyable = allEvents.filter(function(e){
+    return e.status === "upcoming" || e.status === "current";
+  });
+
+  var pick = document.getElementById("ticketEventsPick");
   if(!buyable.length){
-    pick.innerHTML='<div class="empty">No purchasable shows.</div>';
-  }else{
-    pick.innerHTML=buyable.map(e=>`<label class="pay-option">
-      <input type="radio" name="pickEvent" value="${e.id}" ${eventId===e.id?"checked":""}/>
-      <span><strong>${esc(e.title)}</strong><br>
-      <span class="meta">${fmtDate(e.eventDate)} · $${Number(e.ticketPrice||0).toFixed(2)}</span></span>
-    </label>`).join("");
+    pick.innerHTML = '<div class="empty">No purchasable shows.</div>';
+  } else {
+    var html = "";
+    for(var i=0;i<buyable.length;i++){
+      var e = buyable[i];
+      html += '<label class="pay-option">'
+        + '<input type="radio" name="pickEvent" value="'+e.id+'"'+(eventId===e.id?" checked":"")+'/>'
+        + '<span><strong>'+esc(e.title)+'</strong><br>'
+        + '<span class="meta">'+fmtDate(e.eventDate)+' · $'+Number(e.ticketPrice||0).toFixed(2)+'</span></span>'
+        + '</label>';
+    }
+    pick.innerHTML = html;
   }
 
   if(eventId){
-    const f=allEvents.find(e=>e.id===eventId);
-    if(f){selectedEvent=f;ticketStep=2;showTicketStep();}
+    var found = null;
+    for(var k=0;k<allEvents;k++){}
+    for(var j=0;j<allEvents.length;j++){
+      if(allEvents[j].id === eventId){ found = allEvents[j]; break; }
+    }
+    if(found){
+      selectedEvent = found;
+      ticketStep = 2;
+      showTicketStep();
+    }
   }
-  document.getElementById("ticketModal").classList.add("open");
+
+  var m = document.getElementById("ticketModal");
+  m.classList.add("open");
+  m.style.display = "grid";
 }
-window.openTicketFlow=openTicketFlow;
 
 function showTicketStep(){
-  document.getElementById("ticketStepEvents").style.display=ticketStep===1?"block":"none";
-  document.getElementById("ticketStepPay").style.display=ticketStep===2?"block":"none";
-  document.getElementById("ticketStepDone").style.display=ticketStep===3?"block":"none";
-  document.getElementById("ticketBack").style.display=ticketStep===2?"":"none";
-  document.getElementById("ticketNext").style.display=ticketStep===3?"none":"";
-  document.getElementById("ticketNext").textContent=ticketStep===2?"Submit Payment":"Continue";
-  if(ticketStep===2&&selectedEvent){
-    document.getElementById("selectedEventInfo").innerHTML=`
-      <strong>${esc(selectedEvent.title)}</strong><br>
-      <span class="meta">${fmtDate(selectedEvent.eventDate)} · ${esc(selectedEvent.venue||"")}</span><br>
-      $${Number(selectedEvent.ticketPrice||0).toFixed(2)} ${esc(selectedEvent.ticketCurrency||"USD")}`;
+  document.getElementById("ticketStepEvents").style.display = ticketStep === 1 ? "block" : "none";
+  document.getElementById("ticketStepPay").style.display = ticketStep === 2 ? "block" : "none";
+  document.getElementById("ticketStepDone").style.display = ticketStep === 3 ? "block" : "none";
+  document.getElementById("ticketBack").style.display = ticketStep === 2 ? "" : "none";
+  document.getElementById("ticketNext").style.display = ticketStep === 3 ? "none" : "";
+  document.getElementById("ticketNext").textContent = ticketStep === 2 ? "Submit Payment" : "Continue";
+
+  if(ticketStep === 2 && selectedEvent){
+    document.getElementById("selectedEventInfo").innerHTML =
+      '<strong>'+esc(selectedEvent.title)+'</strong><br>'
+      + '<span class="meta">'+fmtDate(selectedEvent.eventDate)+' · '+esc(selectedEvent.venue||"")+'</span><br>'
+      + '$'+Number(selectedEvent.ticketPrice||0).toFixed(2)+' '+esc(selectedEvent.ticketCurrency||"USD");
   }
 }
 
 function onTicketNext(){
-  if(ticketStep===1){
-    const c=document.querySelector('input[name="pickEvent"]:checked');
-    if(!c) return alert("Select an event.");
-    selectedEvent=allEvents.find(e=>e.id===c.value);
-    ticketStep=2;
+  if(ticketStep === 1){
+    var c = document.querySelector('input[name="pickEvent"]:checked');
+    if(!c){ alert("Select an event."); return; }
+    var found = null;
+    for(var i=0;i<allEvents.length;i++){
+      if(allEvents[i].id === c.value){ found = allEvents[i]; break; }
+    }
+    selectedEvent = found;
+    ticketStep = 2;
     showTicketStep();
     return;
   }
-  if(ticketStep===2) submitTicket();
-}
-
-function onPayMethodChange(){
-  const method=document.querySelector('input[name="payMethod"]:checked')?.value;
-  const wallet=document.getElementById("walletDisplay");
-  const hint=document.getElementById("contactHint");
-  const tx=document.getElementById("txGroup");
-  if(!method){wallet.style.display="none";hint.style.display="none";return;}
-  if(method==="CONTACT"){
-    wallet.style.display="none";
-    hint.style.display="block";
-    tx.style.display="none";
-  }else{
-    hint.style.display="none";
-    tx.style.display="block";
-    wallet.style.display="block";
-    wallet.innerHTML=`<strong>Send ${method} to:</strong><br>${esc(wallets[method]||"Wallet not configured yet.")}`;
+  if(ticketStep === 2){
+    submitTicket();
   }
 }
 
-async function submitTicket(){
-  const name=document.getElementById("buyerName").value.trim();
-  const email=document.getElementById("buyerEmail").value.trim();
-  const qty=Math.max(1,parseInt(document.getElementById("ticketQty").value,10)||1);
-  const method=document.querySelector('input[name="payMethod"]:checked')?.value;
-  const txHash=document.getElementById("txHash").value.trim();
+function onPayMethodChange(){
+  var checked = document.querySelector('input[name="payMethod"]:checked');
+  var method = checked ? checked.value : null;
+  var wallet = document.getElementById("walletDisplay");
+  var hint = document.getElementById("contactHint");
+  var tx = document.getElementById("txGroup");
 
-  if(!name||!email) return alert("Name and email required.");
-  if(!method) return alert("Select payment method.");
-  if(method!=="CONTACT"&&!txHash) return alert("Paste crypto TX hash.");
+  if(!method){
+    wallet.style.display = "none";
+    hint.style.display = "none";
+    return;
+  }
+  if(method === "CONTACT"){
+    wallet.style.display = "none";
+    hint.style.display = "block";
+    tx.style.display = "none";
+  } else {
+    hint.style.display = "none";
+    tx.style.display = "block";
+    wallet.style.display = "block";
+    wallet.innerHTML = '<strong>Send '+method+' to:</strong><br>' + esc(wallets[method] || "Wallet not configured yet.");
+  }
+}
 
-  const user=auth.currentUser;
-  const amount=Number(selectedEvent.ticketPrice||0)*qty;
-  const id=uid();
-  const code=receiptCode();
+function submitTicket(){
+  var name = document.getElementById("buyerName").value.trim();
+  var email = document.getElementById("buyerEmail").value.trim();
+  var qty = Math.max(1, parseInt(document.getElementById("ticketQty").value, 10) || 1);
+  var checked = document.querySelector('input[name="payMethod"]:checked');
+  var method = checked ? checked.value : null;
+  var txHash = document.getElementById("txHash").value.trim();
 
-  await db.ref("tickets/"+id).set({
-    id,
-    userId:user?user.uid:null,
-    eventId:selectedEvent.id,
-    buyerName:name,
-    buyerEmail:email,
-    quantity:qty,
-    paymentMethod:method,
-    paymentCurrency:method==="CONTACT"?"BANK":method,
-    txHash:txHash||"",
-    amount,
-    status:method==="CONTACT"?"awaiting_contact":"pending",
-    receiptCode:code,
-    eventTitle:selectedEvent.title,
-    eventDate:selectedEvent.eventDate,
-    eventTime:selectedEvent.eventTime||"",
-    venue:selectedEvent.venue||"",
-    location:selectedEvent.location||"",
-    createdAt:Date.now()
+  if(!name || !email){ alert("Name and email required."); return; }
+  if(!method){ alert("Select payment method."); return; }
+  if(method !== "CONTACT" && !txHash){ alert("Paste crypto TX hash."); return; }
+
+  var user = auth.currentUser;
+  var amount = Number(selectedEvent.ticketPrice || 0) * qty;
+  var id = uid();
+  var code = receiptCode();
+
+  db.ref("tickets/" + id).set({
+    id: id,
+    userId: user ? user.uid : null,
+    eventId: selectedEvent.id,
+    buyerName: name,
+    buyerEmail: email,
+    quantity: qty,
+    paymentMethod: method,
+    paymentCurrency: method === "CONTACT" ? "BANK" : method,
+    txHash: txHash || "",
+    amount: amount,
+    status: method === "CONTACT" ? "awaiting_contact" : "pending",
+    receiptCode: code,
+    eventTitle: selectedEvent.title,
+    eventDate: selectedEvent.eventDate,
+    eventTime: selectedEvent.eventTime || "",
+    venue: selectedEvent.venue || "",
+    location: selectedEvent.location || "",
+    createdAt: Date.now()
+  }).then(function(){
+    ticketStep = 3;
+    showTicketStep();
+    document.getElementById("pendingReceipt").innerHTML =
+      '<div><strong>Reference / Receipt Code</strong></div>'
+      + '<code>'+code+'</code>'
+      + '<div style="margin-top:.6rem">'
+      + 'Event: '+esc(selectedEvent.title)+'<br>'
+      + 'Qty: '+qty+' · Amount: $'+amount.toFixed(2)+'<br>'
+      + 'Method: '+esc(method)+'<br>'
+      + 'Status: '+(method === "CONTACT" ? "Contact management via live chat" : "Pending admin approval")
+      + '</div>';
+  }).catch(function(err){
+    alert("Error submitting: " + err.message);
   });
-
-  ticketStep=3;
-  showTicketStep();
-  document.getElementById("pendingReceipt").innerHTML=`
-    <div><strong>Reference / Receipt Code</strong></div>
-    <code>${code}</code>
-    <div style="margin-top:.6rem">
-      Event: ${esc(selectedEvent.title)}<br>
-      Qty: ${qty} · Amount: $${amount.toFixed(2)}<br>
-      Method: ${esc(method)}<br>
-      Status: ${method==="CONTACT"?"Contact management via live chat":"Pending admin approval"}
-    </div>`;
 }
 </script>
 </body>
