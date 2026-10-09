@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noah Nine | Admin</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="navbar">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark">N9</span><span>Admin</span></a>
+    <div class="nav-links">
+      <a href="index.html">Site</a>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn" type="button" style="display:none">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Login gate -->
+<div class="auth-shell" id="adminLogin">
+  <div class="auth-card">
+    <h1 id="adminLoginTitle">Admin Login</h1>
+    <p class="sub" id="adminLoginSub">Noah Nine management panel</p>
+    <div class="error-msg" id="loginErr"></div>
+    <div class="success-msg" id="loginOk"></div>
+    <form id="adminLoginForm">
+      <div class="form-group"><label>Username</label><input id="adminUser" autocomplete="username" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="adminPass" autocomplete="current-password" required /></div>
+      <button class="btn btn-primary btn-block" type="submit" id="adminLoginBtn">Enter Admin</button>
+    </form>
+    <p style="margin-top:.8rem;color:var(--muted);font-size:.85rem;text-align:center" id="firstRunHint"></p>
+  </div>
+</div>
+
+<div class="dashboard container" id="adminDash">
+  <div class="dash-header">
+    <div>
+      <h1>Admin Dashboard</h1>
+      <p class="section-sub" style="margin:0">Manage music, shows, tickets, chat &amp; news</p>
+    </div>
+  </div>
+
+  <div class="dash-nav" id="adminNav">
+    <button class="tab active" type="button" data-panel="music">Music</button>
+    <button class="tab" type="button" data-panel="events">Events</button>
+    <button class="tab" type="button" data-panel="tickets">Tickets</button>
+    <button class="tab" type="button" data-panel="support">Support $</button>
+    <button class="tab" type="button" data-panel="news">News</button>
+    <button class="tab" type="button" data-panel="bio">Biography</button>
+    <button class="tab" type="button" data-panel="chat">Chats</button>
+    <button class="tab" type="button" data-panel="settings">Settings</button>
+    <button class="tab" type="button" data-panel="users">Users</button>
+  </div>
+
+  <!-- MUSIC -->
+  <div class="dash-panel active" id="panel-music">
+    <div class="card">
+      <h2>Add Music</h2>
+      <div class="inline-form">
+        <div class="form-row">
+          <div class="form-group"><label>Title</label><input id="mTitle" /></div>
+          <div class="form-group"><label>Album</label><input id="mAlbum" placeholder="Single" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Release date</label><input id="mDate" type="date" /></div>
+          <div class="form-group"><label>Cover URL</label><input id="mCover" /></div>
+        </div>
+        <div class="form-group"><label>Audio / stream URL</label><input id="mAudio" /></div>
+        <button class="btn btn-primary" id="addMusic" type="button">Add Track</button>
+      </div>
+      <div id="musicAdminList" class="grid-2"></div>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="dash-panel" id="panel-events">
+    <div class="card">
+      <h2>Add / Manage Events</h2>
+      <div class="inline-form">
+        <div class="form-row">
+          <div class="form-group"><label>Title</label><input id="eTitle" /></div>
+          <div class="form-group"><label>Status</label>
+            <select id="eStatus">
+              <option value="upcoming">Coming soon</option>
+              <option value="current">Current</option>
+              <option value="past">Past</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Date</label><input id="eDate" type="date" /></div>
+          <div class="form-group"><label>Time</label><input id="eTime" placeholder="8:00 PM" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Venue</label><input id="eVenue" /></div>
+          <div class="form-group"><label>Location</label><input id="eLocation" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Ticket price</label><input id="ePrice" type="number" step="0.01" value="0" /></div>
+          <div class="form-group"><label>Currency</label><input id="eCur" value="USD" /></div>
+        </div>
+        <div class="form-group"><label>Description</label><textarea id="eDesc"></textarea></div>
+        <div class="form-group"><label>Flyer URL</label><input id="eFlyer" /></div>
+        <button class="btn btn-primary" id="addEvent" type="button">Add Event</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Title</th><th>Date</th><th>Status</th><th>Price</th><th></th></tr></thead>
+          <tbody id="eventsAdminBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKETS -->
+  <div class="dash-panel" id="panel-tickets">
+    <div class="card table-wrap">
+      <h2 style="margin-bottom:.8rem">Ticket Payments</h2>
+      <p class="section-sub">Approve crypto payments to finalize receipt (code, ID, full event info).</p>
+      <table>
+        <thead>
+          <tr><th>Code</th><th>Buyer</th><th>Event</th><th>Pay</th><th>TX</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="ticketsAdminBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SUPPORT -->
+  <div class="dash-panel" id="panel-support">
+    <div class="card table-wrap">
+      <h2 style="margin-bottom:.8rem">Support Payments</h2>
+      <table>
+        <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>TX</th><th>Msg</th><th>Status</th><th></th></tr></thead>
+        <tbody id="supportAdminBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NEWS -->
+  <div class="dash-panel" id="panel-news">
+    <div class="card">
+      <h2>Publish News / Notification</h2>
+      <div class="inline-form">
+        <div class="form-group"><label>Title</label><input id="nTitle" /></div>
+        <div class="form-group"><label>Content</label><textarea id="nContent"></textarea></div>
+        <button class="btn btn-primary" id="addNews" type="button">Publish</button>
+      </div>
+      <div id="newsAdminList" class="grid-2"></div>
+    </div>
+  </div>
+
+  <!-- BIO -->
+  <div class="dash-panel" id="panel-bio">
+    <div class="card">
+      <h2>Biography</h2>
+      <div class="form-group"><label>Bio text</label><textarea id="bioInput" style="min-height:220px"></textarea></div>
+      <button class="btn btn-primary" id="saveBio" type="button">Save Biography</button>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="dash-panel" id="panel-chat">
+    <div class="grid-2">
+      <div class="card">
+        <h2>Chat rooms</h2>
+        <div class="chat-rooms" id="chatRooms"></div>
+        <button class="btn btn-danger btn-sm" id="deleteRoom" type="button">Delete selected chat</button>
+      </div>
+      <div class="card" style="height:520px;display:flex;flex-direction:column;padding:0;overflow:hidden">
+        <div class="chat-head"><strong id="adminChatTitle">Select a room</strong></div>
+        <div class="chat-messages" id="adminChatMsgs"></div>
+        <div class="chat-input-row">
+          <input id="adminChatInput" placeholder="Reply as management..." />
+          <button class="btn btn-primary" id="adminChatSend" type="button">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="dash-panel" id="panel-settings">
+    <div class="card" style="max-width:640px">
+      <h2>Crypto wallets &amp; contact</h2>
+      <div class="form-group"><label>BTC address</label><input id="wBTC" /></div>
+      <div class="form-group"><label>USDT address</label><input id="wUSDT" /></div>
+      <div class="form-group"><label>TRX address</label><input id="wTRX" /></div>
+      <hr class="sep" />
+      <div class="form-group"><label>Management email</label><input id="cEmail" /></div>
+      <div class="form-group"><label>Management phone</label><input id="cPhone" /></div>
+      <div class="form-group"><label>Notes</label><textarea id="cNotes"></textarea></div>
+      <button class="btn btn-primary" id="saveSettings" type="button">Save Settings</button>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div class="dash-panel" id="panel-users">
+    <div class="card table-wrap">
+      <h2 style="margin-bottom:.8rem">Users</h2>
+      <p class="section-sub">Delete a user's profile and their chat messages.</p>
+      <table>
+        <thead><tr><th>Username</th><th>Email</th><th>Role</th><th></th></tr></thead>
+        <tbody id="usersAdminBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* ================= Helpers ================= */
+function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function fmtDate(str){if(!str)return"";try{return new Date(str+"T00:00:00").toLocaleDateString();}catch(e){return str;}}
+function uid(){return db.ref().push().key;}
+function playBeep(){
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    var o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);o.frequency.value=980;o.type="sine";
+    g.gain.setValueAtTime(.22,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.2);
+    o.start();o.stop(ctx.currentTime+.2);
+  }catch(e){}
+}
+
+/* SHA-256 hash with random salt (no plaintext passwords stored) */
+async function hashPassword(password, salt){
+  var data = new TextEncoder().encode(salt + ":" + password);
+  var digest = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(digest)).map(function(b){
+    return b.toString(16).padStart(2, "0");
+  }).join("");
+}
+function makeSalt(){
+  var arr = new Uint8Array(16);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+}
+
+/* ================= Admin session (no Firebase Auth) ================= */
+var adminUser = null;
+var activeRoom = null;
+var roomListener = null;
+var lastChatKey = undefined;
+var SESSION_KEY = "nn_admin_session";
+
+function setSession(username){
+  try { sessionStorage.setItem(SESSION_KEY, username); } catch(e){}
+  adminUser = username;
+  document.getElementById("adminLogin").style.display = "none";
+  document.getElementById("adminDash").style.display = "block";
+  document.getElementById("logoutBtn").style.display = "";
+  initAdmin();
+}
+function clearSession(){
+  try { sessionStorage.removeItem(SESSION_KEY); } catch(e){}
+  adminUser = null;
+  document.getElementById("adminLogin").style.display = "grid";
+  document.getElementById("adminDash").style.display = "none";
+  document.getElementById("logoutBtn").style.display = "none";
+  document.getElementById("adminLoginForm").reset();
+}
+
+/* ================= Login / first-run setup ================= */
+async function checkFirstRun(){
+  try {
+    var snap = await db.ref("adminCredentials").once("value");
+    var creds = snap.val();
+    var hint = document.getElementById("firstRunHint");
+    if(!creds || !creds.username){
+      document.getElementById("adminLoginTitle").textContent = "First-Time Setup";
+      document.getElementById("adminLoginSub").textContent = "Create your admin username & password now — this becomes your permanent admin login.";
+      document.getElementById("adminLoginBtn").textContent = "Create Admin & Enter";
+      if(hint) hint.textContent = "The FIRST username/password you submit here is saved as the admin account.";
+    } else {
+      document.getElementById("adminLoginTitle").textContent = "Admin Login";
+      document.getElementById("adminLoginSub").textContent = "Noah Nine management panel";
+      document.getElementById("adminLoginBtn").textContent = "Enter Admin";
+      if(hint) hint.textContent = "";
+    }
+  } catch(e){
+    var err = document.getElementById("loginErr");
+    err.style.display = "block";
+    err.textContent = "Cannot reach the database — check your firebaseConfig databaseURL and rules. (" + e.message + ")";
+  }
+}
+
+document.getElementById("adminLoginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  handleAdminLogin();
+});
+
+async function handleAdminLogin(){
+  var err = document.getElementById("loginErr");
+  var ok = document.getElementById("loginOk");
+  err.style.display = "none"; ok.style.display = "none";
+
+  var username = document.getElementById("adminUser").value.trim();
+  var password = document.getElementById("adminPass").value;
+
+  if(!username || !password){
+    err.style.display = "block";
+    err.textContent = "Username and password are required.";
+    return;
+  }
+  if(password.length < 6){
+    err.style.display = "block";
+    err.textContent = "Password must be at least 6 characters.";
+    return;
+  }
+
+  var btn = document.getElementById("adminLoginBtn");
+  btn.disabled = true;
+  var original = btn.textContent;
+  btn.textContent = "Please wait…";
+
+  try {
+    var snap = await db.ref("adminCredentials").once("value");
+    var creds = snap.val();
+
+    if(!creds || !creds.username){
+      /* FIRST LOGIN — auto-create admin credentials */
+      var salt = makeSalt();
+      var hash = await hashPassword(password, salt);
+      await db.ref("adminCredentials").set({
+        username: username,
+        salt: salt,
+        passwordHash: hash,
+        createdAt: Date.now()
+      });
+      ok.style.display = "block";
+      ok.textContent = "Admin account created. Welcome, " + username + "!";
+      setSession(username);
+    } else {
+      /* NORMAL LOGIN — verify against stored credentials */
+      if(username !== creds.username){
+        err.style.display = "block";
+        err.textContent = "Unknown admin username.";
+        return;
+      }
+      var attempt = await hashPassword(password, creds.salt || "");
+      if(attempt !== creds.passwordHash){
+        err.style.display = "block";
+        err.textContent = "Incorrect password.";
+        return;
+      }
+      setSession(username);
+    }
+  } catch(ex){
+    err.style.display = "block";
+    err.textContent = "Error: " + ex.message + " — check Database rules allow read/write.";
+    console.error(ex);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+document.getElementById("logoutBtn").onclick = function(){ clearSession(); };
+
+/* Restore session on page load */
+(function restoreSession(){
+  var saved = null;
+  try { saved = sessionStorage.getItem(SESSION_KEY); } catch(e){}
+  if(saved){
+    db.ref("adminCredentials").once("value").then(function(snap){
+      var creds = snap.val();
+      if(creds && creds.username === saved){
+        setSession(saved);
+      } else {
+        clearSession();
+        checkFirstRun();
+      }
+    }).catch(function(){
+      clearSession();
+      checkFirstRun();
+    });
+  } else {
+    checkFirstRun();
+  }
+})();
+
+/* ================= Dashboard ================= */
+function openPanel(name){
+  var tabs = document.querySelectorAll("#adminNav .tab");
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.toggle("active", tabs[i].getAttribute("data-panel") === name);
+  var panels = document.querySelectorAll(".dash-panel");
+  for(var j=0;j<panels.length;j++) panels[j].classList.remove("active");
+  document.getElementById("panel-" + name).classList.add("active");
+}
+
+function initAdmin(){
+  var tabs = document.querySelectorAll("#adminNav .tab");
+  for(var i=0;i<tabs.length;i++){
+    (function(tab){
+      tab.onclick = function(){ openPanel(tab.getAttribute("data-panel")); };
+    })(tabs[i]);
+  }
+
+  /* ----- Music ----- */
+  document.getElementById("addMusic").onclick = function(){
+    var title = document.getElementById("mTitle").value.trim();
+    if(!title){ alert("Title required"); return; }
+    var id = uid();
+    db.ref("music/" + id).set({
+      title: title,
+      album: document.getElementById("mAlbum").value.trim() || "Single",
+      releaseDate: document.getElementById("mDate").value || "",
+      coverUrl: document.getElementById("mCover").value.trim() || "",
+      audioUrl: document.getElementById("mAudio").value.trim() || "",
+      createdAt: Date.now()
+    }).then(function(){
+      document.getElementById("mTitle").value = "";
+      document.getElementById("mAlbum").value = "";
+      document.getElementById("mDate").value = "";
+      document.getElementById("mCover").value = "";
+      document.getElementById("mAudio").value = "";
+    }).catch(function(e){ alert("Error: " + e.message); });
+  };
+
+  db.ref("music").on("value", function(snap){
+    var val = snap.val() || {};
+    var list = Object.keys(val).map(function(id){ var m = val[id]; m.id = id; return m; })
+      .sort(function(a,b){ return (b.releaseDate||"").localeCompare(a.releaseDate||""); });
+    var el = document.getElementById("musicAdminList");
+    if(!list.length){ el.innerHTML = '<div class="empty">No tracks yet.</div>'; return; }
+    el.innerHTML = list.map(function(m){
+      return '<div class="card music-card">'
+        + '<div class="music-cover">' + (m.coverUrl ? '<img src="'+esc(m.coverUrl)+'" alt="">' : "N9") + '</div>'
+        + '<div><h3>'+esc(m.title)+'</h3><div class="meta">'+esc(m.album||"Single")+' · '+esc(m.releaseDate||"")+'</div>'
+        + '<div class="admin-actions">'
+        + '<button class="btn btn-danger btn-sm" type="button" data-delmusic="'+m.id+'">Delete</button>'
+        + '</div></div></div>';
+    }).join("");
+    var dels = el.querySelectorAll("button[data-delmusic]");
+    for(var i=0;i<dels.length;i++){
+      (function(b){
+        b.onclick = function(){
+          if(confirm("Delete this track?")) db.ref("music/" + b.getAttribute("data-delmusic")).remove();
+        };
+      })(dels[i]);
+    }
+  });
+
+  /* ----- Events ----- */
+  document.getElementById("addEvent").onclick = function(){
+    var title = document.getElementById("eTitle").value.trim();
+    var date = document.getElementById("eDate").value;
+    if(!title || !date){ alert("Title and date required"); return; }
+    var id = uid();
+    db.ref("events/" + id).set({
+      id: id,
+      title: title,
+      eventDate: date,
+      eventTime: document.getElementById("eTime").value.trim() || "",
+      venue: document.getElementById("eVenue").value.trim() || "",
+      location: document.getElementById("eLocation").value.trim() || "",
+      ticketPrice: Number(document.getElementById("ePrice").value) || 0,
+      ticketCurrency: document.getElementById("eCur").value.trim() || "USD",
+      description: document.getElementById("eDesc").value.trim() || "",
+      status: document.getElementById("eStatus").value,
+      flyerUrl: document.getElementById("eFlyer").value.trim() || "",
+      createdAt: Date.now()
+    }).then(function(){
+      document.getElementById("eTitle").value = "";
+      document.getElementById("eDate").value = "";
+      document.getElementById("eTime").value = "";
+      document.getElementById("eVenue").value = "";
+      document.getElementById("eLocation").value = "";
+      document.getElementById("ePrice").value = "0";
+      document.getElementById("eDesc").value = "";
+      document.getElementById("eFlyer").value = "";
+    }).catch(function(e){ alert("Error: " + e.message); });
+  };
+
+  db.ref("events").on("value", function(snap){
+    var val = snap.val() || {};
+    var list = Object.keys(val).map(function(id){ var e = val[id]; e.id = id; return e; })
+      .sort(function(a,b){ return (a.eventDate||"").localeCompare(b.eventDate||""); });
+    var body = document.getElementById("eventsAdminBody");
+    if(!list.length){ body.innerHTML = '<tr><td colspan="5" class="empty">No events yet.</td></tr>'; return; }
+    body.innerHTML = list.map(function(e){
+      return '<tr><td>'+esc(e.title)+'</td><td>'+fmtDate(e.eventDate)+'</td>'
+        + '<td><span class="badge badge-'+esc(e.status||"upcoming")+'">'+esc(e.status||"upcoming")+'</span></td>'
+        + '<td>$'+Number(e.ticketPrice||0).toFixed(2)+'</td>'
+        + '<td><div class="admin-actions">'
+        + '<button class="btn btn-ghost btn-sm" type="button" data-evstatus="'+e.id+'">Cycle Status</button>'
+        + '<button class="btn btn-danger btn-sm" type="button" data-evdel="'+e.id+'">Delete</button>'
+        + '</div></td></tr>';
+    }).join("");
+    var btns = body.querySelectorAll("button");
+    for(var i=0;i<btns.length;i++){
+      (function(b){
+        b.onclick = function(){
+          var eid = b.getAttribute("data-evdel") || b.getAttribute("data-evstatus");
+          if(b.hasAttribute("data-evdel")){
+            if(confirm("Delete this event?")) db.ref("events/" + eid).remove();
+          } else {
+            var current = null;
+            for(var k=0;k<list.length;k++){ if(list[k].id === eid){ current = list[k].status || "upcoming"; break; } }
+            var next = current === "upcoming" ? "current" : current === "current" ? "past" : "upcoming";
+            db.ref("events/" + eid + "/status").set(next);
+          }
+        };
+      })(btns[i]);
+    }
+  });
+
+  /* ----- Tickets ----- */
+  db.ref("tickets").on("value", function(snap){
+    var val = snap.val() || {};
+    var list = Object.keys(val).map(function(id){ var t = val[id]; t.id = id; return t; })
+      .sort(function(a,b){ return (b.createdAt||0) - (a.createdAt||0); });
+    var body = document.getElementById("ticketsAdminBody");
+    if(!list.length){ body.innerHTML = '<tr><td colspan="8" class="empty">No ticket requests yet.</td></tr>'; return; }
+    body.innerHTML = list.map(function(t){
+      return '<tr>'
+        + '<td><code>'+esc(t.receiptCode||"")+'</code></td>'
+        + '<td>'+esc(t.buyerName||"")+'<br><span class="meta">'+esc(t.buyerEmail||"")+'</span></td>'
+        + '<td>'+esc(t.eventTitle||"")+'<br><span class="meta">'+fmtDate(t.eventDate)+' × '+(t.quantity||1)+'</span></td>'
+        + '<td>'+esc(t.paymentMethod||"")+'</td>'
+        + '<td style="max-width:140px;word-break:break-all">'+esc(t.txHash||"—")+'</td>'
+        + '<td>$'+Number(t.amount||0).toFixed(2)+'</td>'
+        + '<td><span class="badge badge-'+esc(t.status||"pending")+'">'+esc(t.status||"pending")+'</span></td>'
+        + '<td><div class="admin-actions">'
+        + (t.status !== "approved" ? '<button class="btn btn-success btn-sm" type="button" data-tapprove="'+t.id+'">Approve</button>' : "")
+        + (t.status !== "rejected" ? '<button class="btn btn-ghost btn-sm" type="button" data-treject="'+t.id+'">Reject</button>' : "")
+        + '<button class="btn btn-danger btn-sm" type="button" data-tdel="'+t.id+'">Del</button>'
+        + '</div></td></tr>';
+    }).join("");
+    var btns = body.querySelectorAll("button");
+    for(var i=0;i<btns.length;i++){
+      (function(b){
+        b.onclick = function(){
+          var tid = b.getAttribute("data-tapprove") || b.getAttribute("data-treject") || b.getAttribute("data-tdel");
+          if(b.hasAttribute("data-tapprove")){
+            db.ref("tickets/" + tid + "/status").set("approved").then(playBeep);
+          } else if(b.hasAttribute("data-treject")){
+            db.ref("tickets/" + tid + "/status").set("rejected");
+          } else {
+            if(confirm("Delete this ticket record?")) db.ref("tickets/" + tid).remove();
+          }
+        };
+      })(btns[i]);
+    }
+  });
+
+  /* ----- Support ----- */
+  db.ref("supportPayments").on("value", function(snap){
+    var val = snap.val() || {};
+    var list = Object.keys(val).map(function(id){ var p = val[id]; p.id = id; return p; })
+      .sort(function(a,b){ return (b.createdAt||0) - (a.createdAt||0); });
+    var body = document.getElementById("supportAdminBody");
+    if(!list.length){ body.innerHTML = '<tr><td colspan="7" class="empty">No support payments yet.</td></tr>'; return; }
+    body.innerHTML = list.map(function(p){
+      return '<tr>'
+        + '<td>'+esc(p.username||"")+'</td>'
+        + '<td>$'+Number(p.amount||0).toFixed(2)+'</td>'
+        + '<td>'+esc(p.currency||"")+'</td>'
+        + '<td style="max-width:140px;word-break:break-all">'+esc(p.txHash||"—")+'</td>'
+        + '<td>'+esc(p.message||"—")+'</td>'
+        + '<td><span class="badge badge-'+esc(p.status||"pending")+'">'+esc(p.status||"pending")+'</span></td>'
+        + '<td><div class="admin-actions">'
+        + (p.status !== "approved" ? '<button class="btn btn-success btn-sm" type="button" data-sapprove="'+p.id+'">Approve</button>' : "")
+        + '<button class="btn btn-danger btn-sm" type="button" data-sdel="'+p.id+'">Del</button>'
+        + '</div></td></tr>';
+    }).join("");
+    var btns = body.querySelectorAll("button");
+    for(var i=0;i<btns.length;i++){
+      (function(b){
+        b.onclick = function(){
+          var pid = b.getAttribute("data-sapprove") || b.getAttribute("data-sdel");
+          if(b.hasAttribute("data-sapprove")){
+            db.ref("supportPayments/" + pid + "/status").set("approved").then(playBeep);
+          } else {
+            if(confirm("Delete this support record?")) db.ref("supportPayments/" + pid).remove();
+          }
+        };
+      })(btns[i]);
+    }
+  });
+
+  /* ----- News ----- */
+  document.getElementById("addNews").onclick = function(){
+    var title = document.getElementById("nTitle").value.trim();
+    var content = document.getElementById("nContent").value.trim();
+    if(!title){ alert("Title required"); return; }
+    var id = uid();
+    db.ref("notifications/" + id).set({
+      title: title, content: content, createdAt: Date.now()
+    }).then(function(){
+      document.getElementById("nTitle").value = "";
+      document.getElementById("nContent").value = "";
+      playBeep();
+    }).catch(function(e){ alert("Error: " + e.message); });
+  };
+
+  db.ref("notifications").on("value", function(snap){
+    var val = snap.val() || {};
+    var list = Object.keys(val).map(function(id){ var n = val[id]; n.id = id; return n; })
+      .sort(function(a,b){ return (b.createdAt||0) - (a.createdAt||0); });
+    var el = document.getElementById("newsAdminList");
+    if(!list.length){ el.innerHTML = '<div class="empty">No news published.</div>'; return; }
+    el.innerHTML = list.map(function(n){
+      return '<div class="card"><h3>'+esc(n.title)+'</h3>'
+        + '<div class="meta">'+(n.createdAt ? new Date(n.createdAt).toLocaleString() : "")+'</div>'
+        + '<p style="white-space:pre-wrap;color:#ddd9e8">'+esc(n.content||"")+'</p>'
+        + '<div class="admin-actions" style="margin-top:.6rem">'
+        + '<button class="btn btn-danger btn-sm" type="button" data-ndel="'+n.id+'">Delete</button>'
+        + '</div></div>';
+    }).join("");
+    var dels = el.querySelectorAll("button[data-ndel]");
+    for(var i=0;i<dels.length;i++){
+      (function(b){
+        b.onclick = function(){
+          if(confirm("Delete this news post?")) db.ref("notifications/" + b.getAttribute("data-ndel")).remove();
+        };
+      })(dels[i]);
+    }
+  });
+
+  /* ----- Biography ----- */
+  db.ref("biography").once("value").then(function(snap){
+    var v = snap.val();
+    document.getElementById("bioInput").value = (v && v.text) ? v.text : "";
+  }).catch(function(){});
+  document.getElementById("saveBio").onclick = function(){
+    db.ref("biography").set({ text: document.getElementById("bioInput").value })
+      .then(function(){ alert("Biography saved."); })
+      .catch(function(e){ alert("Error: " + e.message); });
+  };
+
+  /* ----- Chats ----- */
+  db.ref("chatMeta").on("value", function(snap){
+    var val = snap.val() || {};
+    var rooms = Object.keys(val).map(function(id){ var r = val[id]; r.id = id; return r; })
+      .sort(function(a,b){ return (b.lastAt||0) - (a.lastAt||0); });
+    var el = document.getElementById("chatRooms");
+    if(!rooms.length){ el.innerHTML = '<div class="empty">No chat rooms yet.</div>'; return; }
+    el.innerHTML = rooms.map(function(r){
+      return '<div class="chat-room-item'+(activeRoom===r.id?" active":"")+'" data-room="'+r.id+'">'
+        + '<strong>'+esc(r.username||"User")+'</strong><br>'
+        + '<span class="meta">'+esc((r.lastMsg||"").slice(0,40))+'</span></div>';
+    }).join("");
+    var items = el.querySelectorAll(".chat-room-item");
+    for(var i=0;i<items.length;i++){
+      (function(item){
+        item.onclick = function(){ openRoom(item.getAttribute("data-room")); };
+      })(items[i]);
+    }
+  });
+
+  document.getElementById("deleteRoom").onclick = function(){
+    if(!activeRoom){ alert("Select a room first."); return; }
+    if(confirm("Delete this entire chat and its messages?")){
+      db.ref("chats/" + activeRoom).remove();
+      db.ref("chatMeta/" + activeRoom).remove();
+      closeRoom();
+    }
+  };
+
+  document.getElementById("adminChatSend").onclick = sendAdminChat;
+  document.getElementById("adminChatInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter") sendAdminChat();
+  });
+
+  /* ----- Settings ----- */
+  db.ref("cryptoWallets").once("value").then(function(snap){
+    var w = snap.val() || {};
+    document.getElementById("wBTC").value = w.BTC || "";
+    document.getElementById("wUSDT").value = w.USDT || "";
+    document.getElementById("wTRX").value = w.TRX || "";
+  }).catch(function(){});
+  db.ref("contactInfo").once("value").then(function(snap){
+    var c = snap.val() || {};
+    document.getElementById("cEmail").value = c.email || "";
+    document.getElementById("cPhone").value = c.phone || "";
+    document.getElementById("cNotes").value = c.notes || "";
+  }).catch(function(){});
+  document.getElementById("saveSettings").onclick = function(){
+    db.ref("cryptoWallets").set({
+      BTC: document.getElementById("wBTC").value.trim(),
+      USDT: document.getElementById("wUSDT").value.trim(),
+      TRX: document.getElementById("wTRX").value.trim()
+    }).then(function(){
+      return db.ref("contactInfo").set({
+        email: document.getElementById("cEmail").value.trim(),
+        phone: document.getElementById("cPhone").value.trim(),
+        notes: document.getElementById("cNotes").value.trim()
+      });
+    }).then(function(){ alert("Settings saved."); })
+      .catch(function(e){ alert("Error: " + e.message); });
+  };
+
+  /* ----- Users ----- */
+  db.ref("users").on("value", function(snap){
+    var val = snap.val() || {};
+    var list = Object.keys(val).map(function(id){ var u = val[id]; u.id = id; return u; });
+    var body = document.getElementById("usersAdminBody");
+    if(!list.length){ body.innerHTML = '<tr><td colspan="4" class="empty">No registered users yet.</td></tr>'; return; }
+    body.innerHTML = list.map(function(u){
+      return '<tr>'
+        + '<td>'+esc(u.username||"—")+'</td>'
+        + '<td>'+esc(u.email||"—")+'</td>'
+        + '<td>'+esc(u.role||"user")+'</td>'
+        + '<td><button class="btn btn-danger btn-sm" type="button" data-udel="'+u.id+'">Delete User</button></td>'
+        + '</tr>';
+    }).join("");
+    var dels = body.querySelectorAll("button[data-udel]");
+    for(var i=0;i<dels.length;i++){
+      (function(b){
+        b.onclick = function(){
+          var uidToDelete = b.getAttribute("data-udel");
+          if(confirm("Delete this user, their profile and their chat?")){
+            db.ref("users/" + uidToDelete).remove();
+            db.ref("chats/" + uidToDelete).remove();
+            db.ref("chatMeta/" + uidToDelete).remove();
+            if(activeRoom === uidToDelete) closeRoom();
+          }
+        };
+      })(dels[i]);
+    }
+  });
+}
+
+/* ----- Admin chat room ----- */
+function openRoom(roomId){
+  activeRoom = roomId;
+  lastChatKey = undefined;
+  var metaRef = db.ref("chatMeta/" + roomId);
+  metaRef.once("value").then(function(snap){
+    var m = snap.val() || {};
+    document.getElementById("adminChatTitle").textContent = "Chat · " + (m.username || "User");
+  });
+  if(roomListener){ roomListener.off(); roomListener = null; }
+  var box = document.getElementById("adminChatMsgs");
+  roomListener = db.ref("chats/" + roomId);
+  roomListener.on("value", function(snap){
+    var data = snap.val() || {};
+    var msgs = Object.keys(data).map(function(id){ var m = data[id]; m.id = id; return m; })
+      .sort(function(a,b){ return (a.at||0) - (b.at||0); });
+    var newest = msgs.length ? msgs[msgs.length - 1].id : null;
+    if(lastChatKey !== undefined && newest && newest !== lastChatKey) playBeep();
+    lastChatKey = newest;
+    box.innerHTML = msgs.length ? msgs.map(function(m){
+      return '<div class="msg '+(m.sender === "admin" ? "admin" : "user")+'">'
+        + '<div class="who">'+esc(m.sender === "admin" ? "Management" : (m.username || "User"))+' · '
+        + (m.at ? new Date(m.at).toLocaleTimeString() : "")+'</div>'
+        + esc(m.text) + '</div>';
+    }).join("") : '<div class="empty">No messages yet.</div>';
+    box.scrollTop = box.scrollHeight;
+  });
+}
+
+function closeRoom(){
+  if(roomListener){ roomListener.off(); roomListener = null; }
+  activeRoom = null;
+  lastChatKey = undefined;
+  document.getElementById("adminChatTitle").textContent = "Select a room";
+  document.getElementById("adminChatMsgs").innerHTML = "";
+}
+
+function sendAdminChat(){
+  var input = document.getElementById("adminChatInput");
+  var text = input.value.trim();
+  if(!text) return;
+  if(!activeRoom){ alert("Select a chat room first."); return; }
+  db.ref("chats/" + activeRoom).push({
+    text: text,
+    sender: "admin",
+    username: "Management",
+    at: Date.now()
+  }).then(function(){
+    return db.ref("chatMeta/" + activeRoom).update({
+      lastAt: Date.now(),
+      lastMsg: text
+    });
+  }).then(function(){
+    input.value = "";
+    playBeep();
+  }).catch(function(e){ alert("Error: " + e.message); });
+}
+</script>
+</body>
+</html>
