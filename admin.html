@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noah Nine | Admin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">N9</span><span>Admin</span></a>
+      <div class="nav-links">
+        <a href="index.html">Site</a>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Login gate -->
+  <div class="auth-shell" id="adminLogin">
+    <div class="auth-card">
+      <h1>Admin Login</h1>
+      <p class="sub">Noah Nine management panel</p>
+      <div class="error-msg" id="loginErr"></div>
+      <form id="adminLoginForm">
+        <div class="form-group"><label>Email</label><input type="email" id="adminEmail" required /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="adminPass" required /></div>
+        <button class="btn btn-primary btn-block" type="submit">Enter Admin</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="dashboard container" id="adminDash">
+    <div class="dash-header">
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p class="section-sub" style="margin:0">Manage music, shows, tickets, chat & news</p>
+      </div>
+    </div>
+
+    <div class="dash-nav" id="adminNav">
+      <button class="tab active" type="button" data-panel="music">Music</button>
+      <button class="tab" type="button" data-panel="events">Events</button>
+      <button class="tab" type="button" data-panel="tickets">Tickets</button>
+      <button class="tab" type="button" data-panel="support">Support $</button>
+      <button class="tab" type="button" data-panel="news">News</button>
+      <button class="tab" type="button" data-panel="bio">Biography</button>
+      <button class="tab" type="button" data-panel="chat">Chats</button>
+      <button class="tab" type="button" data-panel="settings">Settings</button>
+      <button class="tab" type="button" data-panel="users">Users</button>
+    </div>
+
+    <!-- MUSIC -->
+    <div class="dash-panel active" id="panel-music">
+      <div class="card">
+        <h2>Add Music</h2>
+        <div class="inline-form">
+          <div class="form-row">
+            <div class="form-group"><label>Title</label><input id="mTitle" /></div>
+            <div class="form-group"><label>Album</label><input id="mAlbum" placeholder="Single" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Release date</label><input id="mDate" type="date" /></div>
+            <div class="form-group"><label>Cover URL</label><input id="mCover" /></div>
+          </div>
+          <div class="form-group"><label>Audio / stream URL</label><input id="mAudio" /></div>
+          <button class="btn btn-primary" id="addMusic" type="button">Add Track</button>
+        </div>
+        <div id="musicAdminList" class="grid-2"></div>
+      </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="dash-panel" id="panel-events">
+      <div class="card">
+        <h2>Add / Manage Events</h2>
+        <div class="inline-form">
+          <div class="form-row">
+            <div class="form-group"><label>Title</label><input id="eTitle" /></div>
+            <div class="form-group"><label>Status</label>
+              <select id="eStatus">
+                <option value="upcoming">Coming soon</option>
+                <option value="current">Current</option>
+                <option value="past">Past</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Date</label><input id="eDate" type="date" /></div>
+            <div class="form-group"><label>Time</label><input id="eTime" placeholder="8:00 PM" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Venue</label><input id="eVenue" /></div>
+            <div class="form-group"><label>Location</label><input id="eLocation" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Ticket price</label><input id="ePrice" type="number" step="0.01" value="0" /></div>
+            <div class="form-group"><label>Currency</label><input id="eCur" value="USD" /></div>
+          </div>
+          <div class="form-group"><label>Description</label><textarea id="eDesc"></textarea></div>
+          <div class="form-group"><label>Flyer URL</label><input id="eFlyer" /></div>
+          <button class="btn btn-primary" id="addEvent" type="button">Add Event</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Date</th><th>Status</th><th>Price</th><th></th></tr></thead>
+            <tbody id="eventsAdminBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="dash-panel" id="panel-tickets">
+      <div class="card table-wrap">
+        <h2 style="margin-bottom:.8rem">Ticket Payments</h2>
+        <p class="section-sub">Approve crypto payments to finalize receipt (code, ID, full event info).</p>
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Buyer</th><th>Event</th><th>Pay</th><th>TX</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="ticketsAdminBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SUPPORT -->
+    <div class="dash-panel" id="panel-support">
+      <div class="card table-wrap">
+        <h2 style="margin-bottom:.8rem">Support Payments</h2>
+        <table>
+          <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>TX</th><th>Msg</th><th>Status</th><th></th></tr></thead>
+          <tbody id="supportAdminBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- NEWS -->
+    <div class="dash-panel" id="panel-news">
+      <div class="card">
+        <h2>Publish News / Notification</h2>
+        <div class="inline-form">
+          <div class="form-group"><label>Title</label><input id="nTitle" /></div>
+          <div class="form-group"><label>Content</label><textarea id="nContent"></textarea></div>
+          <button class="btn btn-primary" id="addNews" type="button">Publish</button>
+        </div>
+        <div id="newsAdminList" class="grid-2"></div>
+      </div>
+    </div>
+
+    <!-- BIO -->
+    <div class="dash-panel" id="panel-bio">
+      <div class="card">
+        <h2>Biography</h2>
+        <div class="form-group"><label>Bio text</label><textarea id="bioInput" style="min-height:220px"></textarea></div>
+        <button class="btn btn-primary" id="saveBio" type="button">Save Biography</button>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="dash-panel" id="panel-chat">
+      <div class="grid-2">
+        <div class="card">
+          <h2>Chat rooms</h2>
+          <div class="chat-rooms" id="chatRooms"></div>
+          <button class="btn btn-danger btn-sm" id="deleteRoom" type="button">Delete selected chat</button>
+        </div>
+        <div class="card" style="height:520px;display:flex;flex-direction:column;padding:0;overflow:hidden">
+          <div class="chat-head"><strong id="adminChatTitle">Select a room</strong></div>
+          <div class="chat-messages" id="adminChatMsgs"></div>
+          <div class="chat-input-row">
+            <input id="adminChatInput" placeholder="Reply as management..." />
+            <button class="btn btn-primary" id="adminChatSend" type="button">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="dash-panel" id="panel-settings">
+      <div class="card" style="max-width:640px">
+        <h2>Crypto wallets & contact</h2>
+        <div class="form-group"><label>BTC address</label><input id="wBTC" /></div>
+        <div class="form-group"><label>USDT address</label><input id="wUSDT" /></div>
+        <div class="form-group"><label>TRX address</label><input id="wTRX" /></div>
+        <hr class="sep" />
+        <div class="form-group"><label>Management email</label><input id="cEmail" /></div>
+        <div class="form-group"><label>Management phone</label><input id="cPhone" /></div>
+        <div class="form-group"><label>Notes</label><textarea id="cNotes"></textarea></div>
+        <button class="btn btn-primary" id="saveSettings" type="button">Save Settings</button>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="dash-panel" id="panel-users">
+      <div class="card table-wrap">
+        <h2 style="margin-bottom:.8rem">Users</h2>
+        <p class="section-sub">Delete user profile + their chat. (Firebase Auth user must be deleted in Console if needed.)</p>
+        <table>
+          <thead><tr><th>Username</th><th>Email</th><th>Role</th><th></th></tr></thead>
+          <tbody id="usersAdminBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+      projectId: "YOUR_PROJECT",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+    function fmtDate(str){if(!str)return"";try{return new Date(str+"T00:00:00").toLocaleDateString();}catch{return str;}}
+    function uid(){return db.ref().push().key;}
+    function playBeep(){
+      try{
+        const ctx=new(window.AudioContext||window.webkitAudioContext)();
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);o.frequency.value=980;o.type="sine";
+        g.gain.setValueAtTime(.22,ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.2);
+        o.start();o.stop(ctx.currentTime+.2);
+      }catch(_){}
+    }
+
+    let adminUser=null, activeRoom=null, lastChatKey=undefined;
+
+    document.getElementById("logoutBtn").onclick = () => auth.signOut().then(()=>location.reload());
+
+    document.getElementById("adminLoginForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const err=document.getElementById("loginErr"); err.style.display="none";
+      try {
+        await auth.signInWithEmailAndPassword(
+          document.getElementById("adminEmail").value.trim(),
+          document.getElementById("adminPass").value
+        );
+      } catch (ex) {
+        err.style.display="block"; err.textContent=ex.message;
+      }
+    };
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        document.getElementById("adminLogin").style.display="grid";
+        document.getElementById("adminDash").style.display="none";
+        return;
+      }
+      const snap = await db.ref("users/"+user.uid).once("value");
+      const profile = snap.val();
+      if (!profile || profile.role !== "admin") {
+        document.getElementById("loginErr").style.display="block";
+        document.getElementById("loginErr").textContent="Not an admin account.";
+        await auth.signOut();
+        return;
+      }
+      adminUser = user;
+      document.getElementById("adminLogin").style.display="none";
+      document.getElementById("adminDash").style.display="block";
+      initAdmin();
+    });
+
+    function openPanel(name){
+      document.querySelectorAll("#adminNav .tab").forEach(t=>t.classList.toggle("active", t.dataset.panel===name));
+      document.querySelectorAll(".dash-panel").forEach(p=>p.classList.remove("active"));
+      document.getElementById("panel-"+name).classList.add("active");
+    }
+
+    function initAdmin(){
+      document.querySelectorAll("#adminNav .tab").forEach(tab=>{
+        tab.onclick=()=>openPanel(tab.dataset.panel);
+      });
+
+      // Music
+      document.getElementById("addMusic").onclick = async () => {
+        const title=document.getElementById("mTitle").value.trim();
+        if(!title) return alert("Title required");
+        const id=uid();
+        await db.ref("music/"+id).set({
+          title,
+          album: document.getElementById("mAlbum").value.trim()||"Single",
+          releaseDate: document.getElementById("mDate").value||"",
+          coverUrl: document.getElementByld("mCover")
